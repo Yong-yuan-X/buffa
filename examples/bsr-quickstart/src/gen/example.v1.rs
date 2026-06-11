@@ -666,20 +666,22 @@ pub mod __buffa {
             pub __buffa_unknown_fields: ::buffa::UnknownFieldsView<'a>,
         }
         impl<'a> GreetingView<'a> {
-            /// Decode from `buf`, enforcing a recursion depth limit for nested messages.
+            /// Decode from `buf` under the limits carried by `ctx` (recursion
+            /// depth and the shared unknown-field allowance).
             ///
-            /// Called by [`::buffa::MessageView::decode_view`] with [`::buffa::RECURSION_LIMIT`]
-            /// and by generated sub-message decode arms with `depth - 1`.
+            /// Called by [`::buffa::MessageView::decode_view`] with a fresh
+            /// default context and by generated sub-message decode arms with
+            /// `ctx.descend()?`.
             ///
             /// **Not part of the public API.** Named with a leading underscore to
             /// signal that it is for generated-code use only.
             #[doc(hidden)]
-            pub fn _decode_depth(
+            pub fn _decode_ctx(
                 buf: &'a [u8],
-                depth: u32,
+                ctx: ::buffa::DecodeContext<'_>,
             ) -> ::core::result::Result<Self, ::buffa::DecodeError> {
                 let mut view = Self::default();
-                view._merge_into_view(buf, depth)?;
+                view._merge_into_view(buf, ctx)?;
                 ::core::result::Result::Ok(view)
             }
             /// Merge fields from `buf` into this view (proto merge semantics).
@@ -693,9 +695,9 @@ pub mod __buffa {
             pub fn _merge_into_view(
                 &mut self,
                 buf: &'a [u8],
-                depth: u32,
+                ctx: ::buffa::DecodeContext<'_>,
             ) -> ::core::result::Result<(), ::buffa::DecodeError> {
-                let _ = depth;
+                let _ = ctx;
                 #[allow(unused_variables)]
                 let view = self;
                 let mut cur: &'a [u8] = buf;
@@ -725,17 +727,15 @@ pub mod __buffa {
                                     actual: tag.wire_type() as u8,
                                 });
                             }
-                            if depth == 0 {
-                                return Err(::buffa::DecodeError::RecursionLimitExceeded);
-                            }
+                            let __sub_ctx = ctx.descend()?;
                             let sub = ::buffa::types::borrow_bytes(&mut cur)?;
                             match view.at.as_mut() {
-                                Some(existing) => existing._merge_into_view(sub, depth - 1)?,
+                                Some(existing) => existing._merge_into_view(sub, __sub_ctx)?,
                                 None => {
                                     view.at = ::buffa::MessageFieldView::set(
-                                        ::buffa_types::google::protobuf::__buffa::view::TimestampView::_decode_depth(
+                                        ::buffa_types::google::protobuf::__buffa::view::TimestampView::_decode_ctx(
                                             sub,
-                                            depth - 1,
+                                            __sub_ctx,
                                         )?,
                                     );
                                 }
@@ -796,10 +796,14 @@ pub mod __buffa {
                             );
                         }
                         _ => {
-                            ::buffa::encoding::skip_field_depth(tag, &mut cur, depth)?;
+                            ::buffa::encoding::skip_field_depth(
+                                tag,
+                                &mut cur,
+                                ctx.depth(),
+                            )?;
                             let span_len = before_tag.len() - cur.len();
                             view.__buffa_unknown_fields
-                                .push_raw(&before_tag[..span_len]);
+                                .push_record(before_tag, span_len, ctx)?;
                         }
                     }
                 }
@@ -811,32 +815,40 @@ pub mod __buffa {
             fn decode_view(
                 buf: &'a [u8],
             ) -> ::core::result::Result<Self, ::buffa::DecodeError> {
-                Self::_decode_depth(buf, ::buffa::RECURSION_LIMIT)
+                let __limit = ::core::cell::Cell::new(
+                    ::buffa::DEFAULT_UNKNOWN_FIELD_LIMIT,
+                );
+                Self::_decode_ctx(
+                    buf,
+                    ::buffa::DecodeContext::new(::buffa::RECURSION_LIMIT, &__limit),
+                )
             }
-            fn decode_view_with_limit(
+            fn decode_view_with_ctx(
                 buf: &'a [u8],
-                depth: u32,
+                ctx: ::buffa::DecodeContext<'_>,
             ) -> ::core::result::Result<Self, ::buffa::DecodeError> {
-                Self::_decode_depth(buf, depth)
+                Self::_decode_ctx(buf, ctx)
             }
-            fn to_owned_message(&self) -> super::super::Greeting {
+            fn to_owned_message(
+                &self,
+            ) -> ::core::result::Result<super::super::Greeting, ::buffa::DecodeError> {
                 self.to_owned_from_source(None)
             }
             #[allow(clippy::useless_conversion, clippy::needless_update)]
             fn to_owned_from_source(
                 &self,
                 __buffa_src: ::core::option::Option<&::buffa::bytes::Bytes>,
-            ) -> super::super::Greeting {
+            ) -> ::core::result::Result<super::super::Greeting, ::buffa::DecodeError> {
                 #[allow(unused_imports)]
                 use ::buffa::alloc::string::ToString as _;
                 let _ = __buffa_src;
-                super::super::Greeting {
+                ::core::result::Result::Ok(super::super::Greeting {
                     text: self.text.to_string(),
                     at: match self.at.as_option() {
                         Some(v) => {
                             ::buffa::MessageField::<
                                 ::buffa_types::google::protobuf::Timestamp,
-                            >::some(v.to_owned_from_source(__buffa_src))
+                            >::some(v.to_owned_from_source(__buffa_src)?)
                         }
                         None => ::buffa::MessageField::none(),
                     },
@@ -863,11 +875,10 @@ pub mod __buffa {
                         }),
                     __buffa_unknown_fields: self
                         .__buffa_unknown_fields
-                        .to_owned()
-                        .unwrap_or_default()
+                        .to_owned()?
                         .into(),
                     ..::core::default::Default::default()
-                }
+                })
             }
         }
         impl<'a> ::buffa::ViewEncode<'a> for GreetingView<'a> {
@@ -1117,8 +1128,14 @@ pub mod __buffa {
                 self.0.reborrow()
             }
             /// Convert to the owned message type.
-            #[must_use]
-            pub fn to_owned_message(&self) -> super::super::Greeting {
+            ///
+            /// # Errors
+            ///
+            /// Returns an error if re-materializing preserved unknown fields
+            /// fails (e.g. the unknown-field limit is exceeded).
+            pub fn to_owned_message(
+                &self,
+            ) -> ::core::result::Result<super::super::Greeting, ::buffa::DecodeError> {
                 self.0.to_owned_message()
             }
             /// The underlying bytes buffer.
