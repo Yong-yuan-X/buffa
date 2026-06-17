@@ -585,9 +585,8 @@ fn lazy_singular_message_arm(
     );
     let _ = scope;
     let wire_check = wire_type_check(
-        field_number,
+        &quote! { tag },
         &quote! { ::buffa::encoding::WireType::LengthDelimited },
-        2u8,
     );
     Ok(quote! {
         #field_number => {
@@ -612,9 +611,8 @@ fn lazy_repeated_message_arm(
     );
     let _ = scope;
     let wire_check = wire_type_check(
-        field_number,
+        &quote! { tag },
         &quote! { ::buffa::encoding::WireType::LengthDelimited },
-        2u8,
     );
     Ok(quote! {
         #field_number => {
