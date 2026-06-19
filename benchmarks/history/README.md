@@ -39,6 +39,15 @@ regression.
 - **There is a reproducibility floor of roughly ±5%** even on a quiesced machine,
   from residual scheduler and thermal effects. Treat sub-5% movements as noise
   unless a later release confirms the trend.
+- **Above that sits a larger build-layout floor.** The benches build with cargo's
+  default `bench` profile — `codegen-units=16`, `lto=off` — because
+  `benchmarks/buffa` is excluded from the root workspace, so the root's
+  `lto=true` / `codegen-units=1` do **not** apply to it. At 16 codegen units with
+  no LTO, adding unrelated code re-partitions functions across units and flips
+  inline decisions at unit boundaries, which can move a small dispatch-bound
+  benchmark 10-20% with the measured code unchanged. Quantify this per benchmark
+  with the layout-noise harness below before attributing a movement to the
+  library. A delta within the measured envelope is build noise, not code.
 - **The compiler is held constant.** No release tag pins a Rust toolchain, so
   every binary in the current series was built with the same compiler (recorded
   as `"toolchain": "default"` in each run file). That removes the compiler as a
@@ -61,6 +70,39 @@ regression.
 - `parse_criterion.py` — turns a release's captured criterion output into one
   `runs/<version>.json`.
 - `generate.py` — renders `REPORT.md` and `charts/` from `runs/`.
+- `build-cgu-variants.sh` — builds the bench binary at several `codegen-units`
+  settings for the layout-noise harness.
+- `layout_envelope.py` — computes the per-benchmark layout-noise envelope from
+  labelled criterion captures of those variants (`test_layout_envelope.py`
+  covers it; run `python3 -m unittest` from this directory).
+
+## Layout-noise envelope
+
+To measure how much a benchmark moves under pure build perturbation (so a
+cross-release delta can be told apart from a code change), build the *same*
+source at several `codegen-units` settings — each is a distinct, deterministic
+layout — and compare. The pinned stable toolchain has no `-Z randomize-layout`,
+so a `codegen-units` sweep is the layout-perturbation proxy; it also tells you
+which setting is most stable for the series (lower units → less partition
+churn; `codegen-units=1` is the most reproducible cross-release).
+
+```bash
+# 1. Build the variants (default sweep: codegen-units 1 2 4 8 16).
+task bench-layout-variants -- /tmp/cgu        # or CGUS="1 16" task bench-layout-variants -- /tmp/cgu
+
+# 2. Run them on a quiesced box, capturing each binary's stdout. On metal:
+bench-on-metal.sh --spot \
+  --binary /tmp/cgu/cgu1.bench --binary /tmp/cgu/cgu16.bench \
+  --args "--measurement-time 4"
+# (save each binary's output as cgu1.txt, cgu16.txt, …)
+
+# 3. Compute the envelope.
+task bench-layout-envelope -- --run cgu1=cgu1.txt --run cgu16=cgu16.txt
+```
+
+The report ranks benchmarks by their range across layouts and prints the suite
+p50 / p90 / max. Read a release-over-release delta against the max (or p90)
+envelope: at or below it, the movement is layout noise.
 
 ## Regenerating the report
 
@@ -77,6 +119,7 @@ python3 benchmarks/history/generate.py     # or: task bench-history-report
 2. Run it on a quiesced machine, capturing stdout — criterion needs the `--bench`
    flag: `<binary> --bench --measurement-time 4 > <version>.txt`.
 3. Parse it into a run file:
+
    ```bash
    python3 benchmarks/history/parse_criterion.py \
      --version <version> --stdout <version>.txt \
@@ -85,5 +128,6 @@ python3 benchmarks/history/generate.py     # or: task bench-history-report
      --measured-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
      --out benchmarks/history/runs/<version>.json
    ```
+
 4. Regenerate the report (above) and add an `annotations.md` entry explaining any
    notable movement.
