@@ -13,13 +13,12 @@
 # stable-toolchain proxy for that layout noise (the pinned 1.95.0 toolchain has
 # no `-Z randomize-layout`).
 #
-# Each variant binary is copied to <out-dir>/cgu<N>.bench, ready to A/B on a
-# quiesced box via the metal runner's compare mode:
+# Each variant binary is copied to <out-dir>/cgu<N>.bench. Run each on a quiesced
+# machine, capturing its stdout (criterion needs the --bench flag):
 #
-#   bench-on-metal.sh --spot \
-#     --binary cgu1.bench --binary cgu2.bench --binary cgu4.bench \
-#     --binary cgu8.bench --binary cgu16.bench \
-#     --args "--measurement-time 4"
+#   for v in <out-dir>/cgu*.bench; do
+#     "$v" --bench --measurement-time 4 > "$(basename "$v" .bench).txt"
+#   done
 #
 # then feed the captured per-binary outputs to layout_envelope.py.
 set -euo pipefail

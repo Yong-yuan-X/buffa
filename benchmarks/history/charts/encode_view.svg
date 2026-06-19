@@ -10,20 +10,16 @@
   <rect width="100%" height="100%" fill="white"/>
   <text x="336.0" y="26" text-anchor="middle" class="title">View encode — throughput vs each message’s first release (%)</text>
   <line x1="56" y1="364.0" x2="616" y2="364.0" class="grid"/>
-  <text x="48" y="368.0" text-anchor="end" class="axis-label">80%</text>
-  <line x1="56" y1="310.7" x2="616" y2="310.7" class="grid"/>
-  <text x="48" y="314.7" text-anchor="end" class="axis-label">85%</text>
-  <line x1="56" y1="257.3" x2="616" y2="257.3" class="grid"/>
-  <text x="48" y="261.3" text-anchor="end" class="axis-label">90%</text>
+  <text x="48" y="368.0" text-anchor="end" class="axis-label">90%</text>
+  <line x1="56" y1="284.0" x2="616" y2="284.0" class="grid"/>
+  <text x="48" y="288.0" text-anchor="end" class="axis-label">95%</text>
   <line x1="56" y1="204.0" x2="616" y2="204.0" class="grid"/>
-  <text x="48" y="208.0" text-anchor="end" class="axis-label">95%</text>
-  <line x1="56" y1="150.7" x2="616" y2="150.7" class="grid"/>
-  <text x="48" y="154.7" text-anchor="end" class="axis-label">100%</text>
-  <line x1="56" y1="97.3" x2="616" y2="97.3" class="grid"/>
-  <text x="48" y="101.3" text-anchor="end" class="axis-label">105%</text>
+  <text x="48" y="208.0" text-anchor="end" class="axis-label">100%</text>
+  <line x1="56" y1="124.0" x2="616" y2="124.0" class="grid"/>
+  <text x="48" y="128.0" text-anchor="end" class="axis-label">105%</text>
   <line x1="56" y1="44.0" x2="616" y2="44.0" class="grid"/>
   <text x="48" y="48.0" text-anchor="end" class="axis-label">110%</text>
-  <line x1="56" y1="150.7" x2="616" y2="150.7" class="baseline"/>
+  <line x1="56" y1="204.0" x2="616" y2="204.0" class="baseline"/>
   <text x="56.0" y="382" text-anchor="middle" class="axis-label">v0.1.0</text>
   <text x="136.0" y="382" text-anchor="middle" class="axis-label">v0.2.0</text>
   <text x="216.0" y="382" text-anchor="middle" class="axis-label">v0.3.0</text>
@@ -32,36 +28,36 @@
   <text x="456.0" y="382" text-anchor="middle" class="axis-label">v0.6.0</text>
   <text x="536.0" y="382" text-anchor="middle" class="axis-label">v0.7.0</text>
   <text x="616.0" y="382" text-anchor="middle" class="axis-label">v0.7.1</text>
-  <path d="M296.0,150.7 L376.0,214.9 L456.0,194.4 L536.0,186.4 L616.0,226.5" fill="none" stroke="#4C78A8" stroke-width="2"/>
-  <circle cx="296.0" cy="150.7" r="3" fill="#4C78A8"/>
-  <circle cx="376.0" cy="214.9" r="3" fill="#4C78A8"/>
-  <circle cx="456.0" cy="194.4" r="3" fill="#4C78A8"/>
-  <circle cx="536.0" cy="186.4" r="3" fill="#4C78A8"/>
-  <circle cx="616.0" cy="226.5" r="3" fill="#4C78A8"/>
-  <path d="M296.0,150.7 L376.0,250.2 L456.0,143.1 L536.0,130.6 L616.0,240.0" fill="none" stroke="#F58518" stroke-width="2"/>
-  <circle cx="296.0" cy="150.7" r="3" fill="#F58518"/>
-  <circle cx="376.0" cy="250.2" r="3" fill="#F58518"/>
-  <circle cx="456.0" cy="143.1" r="3" fill="#F58518"/>
-  <circle cx="536.0" cy="130.6" r="3" fill="#F58518"/>
-  <circle cx="616.0" cy="240.0" r="3" fill="#F58518"/>
-  <path d="M296.0,150.7 L376.0,190.8 L456.0,174.8 L536.0,133.5 L616.0,195.1" fill="none" stroke="#54A24B" stroke-width="2"/>
-  <circle cx="296.0" cy="150.7" r="3" fill="#54A24B"/>
-  <circle cx="376.0" cy="190.8" r="3" fill="#54A24B"/>
-  <circle cx="456.0" cy="174.8" r="3" fill="#54A24B"/>
-  <circle cx="536.0" cy="133.5" r="3" fill="#54A24B"/>
-  <circle cx="616.0" cy="195.1" r="3" fill="#54A24B"/>
-  <path d="M296.0,150.7 L376.0,310.8 L456.0,206.5 L536.0,213.9 L616.0,338.5" fill="none" stroke="#E45756" stroke-width="2"/>
-  <circle cx="296.0" cy="150.7" r="3" fill="#E45756"/>
-  <circle cx="376.0" cy="310.8" r="3" fill="#E45756"/>
-  <circle cx="456.0" cy="206.5" r="3" fill="#E45756"/>
-  <circle cx="536.0" cy="213.9" r="3" fill="#E45756"/>
-  <circle cx="616.0" cy="338.5" r="3" fill="#E45756"/>
-  <path d="M296.0,150.7 L376.0,128.7 L456.0,151.4 L536.0,164.5 L616.0,161.9" fill="none" stroke="#72B7B2" stroke-width="2"/>
-  <circle cx="296.0" cy="150.7" r="3" fill="#72B7B2"/>
-  <circle cx="376.0" cy="128.7" r="3" fill="#72B7B2"/>
-  <circle cx="456.0" cy="151.4" r="3" fill="#72B7B2"/>
-  <circle cx="536.0" cy="164.5" r="3" fill="#72B7B2"/>
-  <circle cx="616.0" cy="161.9" r="3" fill="#72B7B2"/>
+  <path d="M296.0,204.0 L376.0,195.6 L456.0,202.8 L536.0,201.4 L616.0,198.2" fill="none" stroke="#4C78A8" stroke-width="2"/>
+  <circle cx="296.0" cy="204.0" r="3" fill="#4C78A8"/>
+  <circle cx="376.0" cy="195.6" r="3" fill="#4C78A8"/>
+  <circle cx="456.0" cy="202.8" r="3" fill="#4C78A8"/>
+  <circle cx="536.0" cy="201.4" r="3" fill="#4C78A8"/>
+  <circle cx="616.0" cy="198.2" r="3" fill="#4C78A8"/>
+  <path d="M296.0,204.0 L376.0,228.1 L456.0,192.7 L536.0,219.9 L616.0,184.6" fill="none" stroke="#F58518" stroke-width="2"/>
+  <circle cx="296.0" cy="204.0" r="3" fill="#F58518"/>
+  <circle cx="376.0" cy="228.1" r="3" fill="#F58518"/>
+  <circle cx="456.0" cy="192.7" r="3" fill="#F58518"/>
+  <circle cx="536.0" cy="219.9" r="3" fill="#F58518"/>
+  <circle cx="616.0" cy="184.6" r="3" fill="#F58518"/>
+  <path d="M296.0,204.0 L376.0,238.2 L456.0,216.6 L536.0,202.3 L616.0,261.8" fill="none" stroke="#54A24B" stroke-width="2"/>
+  <circle cx="296.0" cy="204.0" r="3" fill="#54A24B"/>
+  <circle cx="376.0" cy="238.2" r="3" fill="#54A24B"/>
+  <circle cx="456.0" cy="216.6" r="3" fill="#54A24B"/>
+  <circle cx="536.0" cy="202.3" r="3" fill="#54A24B"/>
+  <circle cx="616.0" cy="261.8" r="3" fill="#54A24B"/>
+  <path d="M296.0,204.0 L376.0,268.7 L456.0,251.5 L536.0,272.9 L616.0,263.6" fill="none" stroke="#E45756" stroke-width="2"/>
+  <circle cx="296.0" cy="204.0" r="3" fill="#E45756"/>
+  <circle cx="376.0" cy="268.7" r="3" fill="#E45756"/>
+  <circle cx="456.0" cy="251.5" r="3" fill="#E45756"/>
+  <circle cx="536.0" cy="272.9" r="3" fill="#E45756"/>
+  <circle cx="616.0" cy="263.6" r="3" fill="#E45756"/>
+  <path d="M296.0,204.0 L376.0,185.5 L456.0,180.8 L536.0,187.0 L616.0,174.9" fill="none" stroke="#72B7B2" stroke-width="2"/>
+  <circle cx="296.0" cy="204.0" r="3" fill="#72B7B2"/>
+  <circle cx="376.0" cy="185.5" r="3" fill="#72B7B2"/>
+  <circle cx="456.0" cy="180.8" r="3" fill="#72B7B2"/>
+  <circle cx="536.0" cy="187.0" r="3" fill="#72B7B2"/>
+  <circle cx="616.0" cy="174.9" r="3" fill="#72B7B2"/>
   <rect x="632" y="50" width="12" height="12" rx="2" fill="#4C78A8"/>
   <text x="650" y="61" class="legend-text">ApiResponse</text>
   <rect x="632" y="72" width="12" height="12" rx="2" fill="#F58518"/>

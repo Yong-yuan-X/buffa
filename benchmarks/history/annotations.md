@@ -11,40 +11,32 @@ as noise unless they form a consistent pattern across many benchmarks.
 
 ## v0.7.1 — 2026-06-10
 
-As-measured in `runs/v0.7.1.json`: a broad, consistent-looking regression —
-median −3.3% across the 50 shared benchmarks, 20 down more than 5%, worst
-GoogleMessage1 decode_view −17.5%, encode_view −13.4%, merge −12.0%; LogRecord
-encode −10.3%. **Almost all of this turned out to be build-layout noise, not a
-code regression** (see below); the run file is kept as-measured, and this is the
-worked example of why the layout envelope matters.
+Net-flat versus v0.7.0 (median −0.2% across the shared benchmarks). Two movements
+clear their spread and reproduce across two independent full runs, so they are
+real:
+- **GoogleMessage1 improved:** `decode` +12%, `merge` +14%, `decode_view` +10%
+  (spreads ≤2.4%). The deeply-nested small message got faster on the owned and
+  eager-view decode paths.
+- **`media_frame/decode_view` regressed −11.6%** (spread ±0.9% — the most solid
+  signal), and `log_record/decode_view` is marginally down (−4 to −6%, near the
+  noise floor). The eager-view decode path lost ground on the bytes/map-heavy
+  messages. This is the one regression worth investigating in v0.7.1.
 
-Resolved: the broad regression is build-layout noise.
-- *Run position ruled out first:* an interleaved re-measurement (v0.7.0, v0.7.1,
-  v0.7.1, v0.7.0 on one box) had each version within ~0.1% of itself across
-  positions, so order was not the cause.
-- *Then a fresh rebuild dissolved it:* the benches build with the default `bench`
-  profile (`codegen-units=16, lto=off`) because `benchmarks/buffa` is outside the
-  root workspace. Rebuilding v0.7.0 and v0.7.1 from the same tags and re-running,
-  the v0.7.1-vs-v0.7.0 delta went from −3.3% to **+0.3% median** — the *same
-  source* measured differently because the fresh binaries have a different (and
-  not byte-identical) code layout. The v0.7.1 layout-noise envelope across builds
-  is **p50 5.84%, p90 15.11%, max 23.87%** (`layout_envelope.py` over the history,
-  cgu16, and cgu1 builds; see [README](README.md#layout-noise-envelope)), and the
-  whole broad deficit sits inside it. Because the optimized profile most consumers
-  build with (`lto=true, codegen-units=1`) is not even this profile, no consumer
-  would see this.
-- *One real signal survives:* GoogleMessage1 `decode_view` stays down ~−9 to −11%
-  across every build, including at `codegen-units=1`, the most stable layout
-  (v0.7.0 ≈ 795 MiB/s, v0.7.1 ≈ 715). That is a genuine eager-view decode
-  regression for that message, beyond the layout envelope, and is the one thing
-  worth chasing in v0.7.1.
-
-Lesson for this history: a single-build per-release delta below the ~15% p90
-layout envelope is not attributable to buffa's code. Treat the `runs/*.json`
-deltas accordingly, and for a real attribution either clear that envelope or
-measure the median of several `codegen-units` builds. (An earlier packed-varint
-over-reservation theory was unsupported — the worst-hit messages have no packed
-varint fields — though it did surface a separate, real allocation fix.)
+Cautionary tale (why this history pins its build config): an earlier measurement
+at cargo's *default* `bench` profile (`codegen-units=16, lto=off`, single sample)
+showed a broad −3.3% regression and fingered `GoogleMessage1/decode_view` at
+−17.5%. **All of that was build-layout noise.** At 16 codegen units, adding
+unrelated code re-partitions functions and flips inline decisions; the v0.7.1
+layout envelope across builds measured p50 5.8% / p90 15% / max 24%
+(`layout_envelope.py`), and the broad deficit sat entirely inside it — the same
+source measured −3.3% on one build and +0.3% on a fresh one. At the reproducible
+profile this history now uses (`lto=true, codegen-units=1`, toolchain pinned,
+median of 4 cores), `GoogleMessage1/decode_view` reverses from −17.5% to **+10%** —
+it was never a regression. The lesson: a sub-~15% delta at the noisy profile means
+nothing; pin the profile, hold the toolchain, and take the median of several runs
+before attributing anything. (An earlier packed-varint over-reservation theory was
+also unsupported here — the messages it would affect have no packed varint fields —
+though it surfaced a separate, real allocation fix.)
 
 ## v0.7.0 — 2026-05-28
 

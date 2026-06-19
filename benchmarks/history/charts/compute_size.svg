@@ -32,48 +32,48 @@
   <text x="456.0" y="382" text-anchor="middle" class="axis-label">v0.6.0</text>
   <text x="536.0" y="382" text-anchor="middle" class="axis-label">v0.7.0</text>
   <text x="616.0" y="382" text-anchor="middle" class="axis-label">v0.7.1</text>
-  <path d="M56.0,150.7 L136.0,150.5 L216.0,133.5 L296.0,198.6 L376.0,192.7 L456.0,198.0 L536.0,193.2 L616.0,195.3" fill="none" stroke="#4C78A8" stroke-width="2"/>
+  <path d="M56.0,150.7 L136.0,156.6 L216.0,165.3 L296.0,212.7 L376.0,212.3 L456.0,222.0 L536.0,221.0 L616.0,210.2" fill="none" stroke="#4C78A8" stroke-width="2"/>
   <circle cx="56.0" cy="150.7" r="3" fill="#4C78A8"/>
-  <circle cx="136.0" cy="150.5" r="3" fill="#4C78A8"/>
-  <circle cx="216.0" cy="133.5" r="3" fill="#4C78A8"/>
-  <circle cx="296.0" cy="198.6" r="3" fill="#4C78A8"/>
-  <circle cx="376.0" cy="192.7" r="3" fill="#4C78A8"/>
-  <circle cx="456.0" cy="198.0" r="3" fill="#4C78A8"/>
-  <circle cx="536.0" cy="193.2" r="3" fill="#4C78A8"/>
-  <circle cx="616.0" cy="195.3" r="3" fill="#4C78A8"/>
-  <path d="M56.0,150.7 L136.0,147.0 L216.0,158.3 L296.0,155.3 L376.0,127.1 L456.0,113.7 L536.0,126.2 L616.0,129.5" fill="none" stroke="#F58518" stroke-width="2"/>
+  <circle cx="136.0" cy="156.6" r="3" fill="#4C78A8"/>
+  <circle cx="216.0" cy="165.3" r="3" fill="#4C78A8"/>
+  <circle cx="296.0" cy="212.7" r="3" fill="#4C78A8"/>
+  <circle cx="376.0" cy="212.3" r="3" fill="#4C78A8"/>
+  <circle cx="456.0" cy="222.0" r="3" fill="#4C78A8"/>
+  <circle cx="536.0" cy="221.0" r="3" fill="#4C78A8"/>
+  <circle cx="616.0" cy="210.2" r="3" fill="#4C78A8"/>
+  <path d="M56.0,150.7 L136.0,160.6 L216.0,151.4 L296.0,168.1 L376.0,147.9 L456.0,150.8 L536.0,152.3 L616.0,143.3" fill="none" stroke="#F58518" stroke-width="2"/>
   <circle cx="56.0" cy="150.7" r="3" fill="#F58518"/>
-  <circle cx="136.0" cy="147.0" r="3" fill="#F58518"/>
-  <circle cx="216.0" cy="158.3" r="3" fill="#F58518"/>
-  <circle cx="296.0" cy="155.3" r="3" fill="#F58518"/>
-  <circle cx="376.0" cy="127.1" r="3" fill="#F58518"/>
-  <circle cx="456.0" cy="113.7" r="3" fill="#F58518"/>
-  <circle cx="536.0" cy="126.2" r="3" fill="#F58518"/>
-  <circle cx="616.0" cy="129.5" r="3" fill="#F58518"/>
-  <path d="M56.0,150.7 L136.0,180.6 L216.0,167.3 L296.0,249.0 L376.0,262.5 L456.0,255.8 L536.0,264.2 L616.0,242.2" fill="none" stroke="#54A24B" stroke-width="2"/>
+  <circle cx="136.0" cy="160.6" r="3" fill="#F58518"/>
+  <circle cx="216.0" cy="151.4" r="3" fill="#F58518"/>
+  <circle cx="296.0" cy="168.1" r="3" fill="#F58518"/>
+  <circle cx="376.0" cy="147.9" r="3" fill="#F58518"/>
+  <circle cx="456.0" cy="150.8" r="3" fill="#F58518"/>
+  <circle cx="536.0" cy="152.3" r="3" fill="#F58518"/>
+  <circle cx="616.0" cy="143.3" r="3" fill="#F58518"/>
+  <path d="M56.0,150.7 L136.0,152.4 L216.0,162.0 L296.0,268.4 L376.0,233.9 L456.0,245.4 L536.0,265.4 L616.0,234.7" fill="none" stroke="#54A24B" stroke-width="2"/>
   <circle cx="56.0" cy="150.7" r="3" fill="#54A24B"/>
-  <circle cx="136.0" cy="180.6" r="3" fill="#54A24B"/>
-  <circle cx="216.0" cy="167.3" r="3" fill="#54A24B"/>
-  <circle cx="296.0" cy="249.0" r="3" fill="#54A24B"/>
-  <circle cx="376.0" cy="262.5" r="3" fill="#54A24B"/>
-  <circle cx="456.0" cy="255.8" r="3" fill="#54A24B"/>
-  <circle cx="536.0" cy="264.2" r="3" fill="#54A24B"/>
-  <circle cx="616.0" cy="242.2" r="3" fill="#54A24B"/>
-  <path d="M56.0,150.7 L136.0,153.7 L216.0,141.1 L296.0,153.6 L376.0,63.5 L456.0,66.2 L536.0,68.3 L616.0,72.3" fill="none" stroke="#E45756" stroke-width="2"/>
+  <circle cx="136.0" cy="152.4" r="3" fill="#54A24B"/>
+  <circle cx="216.0" cy="162.0" r="3" fill="#54A24B"/>
+  <circle cx="296.0" cy="268.4" r="3" fill="#54A24B"/>
+  <circle cx="376.0" cy="233.9" r="3" fill="#54A24B"/>
+  <circle cx="456.0" cy="245.4" r="3" fill="#54A24B"/>
+  <circle cx="536.0" cy="265.4" r="3" fill="#54A24B"/>
+  <circle cx="616.0" cy="234.7" r="3" fill="#54A24B"/>
+  <path d="M56.0,150.7 L136.0,154.6 L216.0,151.9 L296.0,154.6 L376.0,184.3 L456.0,185.7 L536.0,180.6 L616.0,182.6" fill="none" stroke="#E45756" stroke-width="2"/>
   <circle cx="56.0" cy="150.7" r="3" fill="#E45756"/>
-  <circle cx="136.0" cy="153.7" r="3" fill="#E45756"/>
-  <circle cx="216.0" cy="141.1" r="3" fill="#E45756"/>
-  <circle cx="296.0" cy="153.6" r="3" fill="#E45756"/>
-  <circle cx="376.0" cy="63.5" r="3" fill="#E45756"/>
-  <circle cx="456.0" cy="66.2" r="3" fill="#E45756"/>
-  <circle cx="536.0" cy="68.3" r="3" fill="#E45756"/>
-  <circle cx="616.0" cy="72.3" r="3" fill="#E45756"/>
-  <path d="M296.0,150.7 L376.0,148.8 L456.0,146.0 L536.0,146.0 L616.0,150.4" fill="none" stroke="#72B7B2" stroke-width="2"/>
+  <circle cx="136.0" cy="154.6" r="3" fill="#E45756"/>
+  <circle cx="216.0" cy="151.9" r="3" fill="#E45756"/>
+  <circle cx="296.0" cy="154.6" r="3" fill="#E45756"/>
+  <circle cx="376.0" cy="184.3" r="3" fill="#E45756"/>
+  <circle cx="456.0" cy="185.7" r="3" fill="#E45756"/>
+  <circle cx="536.0" cy="180.6" r="3" fill="#E45756"/>
+  <circle cx="616.0" cy="182.6" r="3" fill="#E45756"/>
+  <path d="M296.0,150.7 L376.0,143.8 L456.0,146.8 L536.0,151.5 L616.0,141.3" fill="none" stroke="#72B7B2" stroke-width="2"/>
   <circle cx="296.0" cy="150.7" r="3" fill="#72B7B2"/>
-  <circle cx="376.0" cy="148.8" r="3" fill="#72B7B2"/>
-  <circle cx="456.0" cy="146.0" r="3" fill="#72B7B2"/>
-  <circle cx="536.0" cy="146.0" r="3" fill="#72B7B2"/>
-  <circle cx="616.0" cy="150.4" r="3" fill="#72B7B2"/>
+  <circle cx="376.0" cy="143.8" r="3" fill="#72B7B2"/>
+  <circle cx="456.0" cy="146.8" r="3" fill="#72B7B2"/>
+  <circle cx="536.0" cy="151.5" r="3" fill="#72B7B2"/>
+  <circle cx="616.0" cy="141.3" r="3" fill="#72B7B2"/>
   <path d="M616.0,150.7" fill="none" stroke="#B279A2" stroke-width="2"/>
   <circle cx="616.0" cy="150.7" r="3" fill="#B279A2"/>
   <rect x="632" y="50" width="12" height="12" rx="2" fill="#4C78A8"/>

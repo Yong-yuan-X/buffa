@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import statistics
 import sys
 from pathlib import Path
 
@@ -149,10 +150,41 @@ def parse_sysinfo(text: str) -> dict:
     return info
 
 
+def aggregate(captures: list[dict[str, dict]]) -> dict[str, dict]:
+    """Merge several captures of the same release (one per core) into one set of
+    per-benchmark stats: the median across captures, plus the spread as a
+    stability indicator. A single capture yields that value with zero spread."""
+    by_bench: dict[str, dict[str, list[float]]] = {}
+    for cap in captures:
+        for bench, stats in cap.items():
+            slot = by_bench.setdefault(bench, {"median_ns": [], "throughput_mib_s": []})
+            for k in ("median_ns", "throughput_mib_s"):
+                if stats.get(k) is not None:
+                    slot[k].append(stats[k])
+    merged: dict[str, dict] = {}
+    for bench, slot in by_bench.items():
+        thr = slot["throughput_mib_s"]
+        ns = slot["median_ns"]
+        entry: dict = {}
+        if ns:
+            entry["median_ns"] = round(statistics.median(ns), 4)
+        if thr:
+            med = statistics.median(thr)
+            entry["throughput_mib_s"] = round(med, 4)
+            entry["samples"] = len(thr)
+            # Spread = (max-min)/median %, a direction-agnostic stability measure.
+            entry["throughput_spread_pct"] = (
+                round((max(thr) - min(thr)) / med * 100, 2) if len(thr) > 1 and med else 0.0
+            )
+        merged[bench] = entry
+    return merged
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--version", required=True, help="release tag, e.g. v0.3.0")
-    ap.add_argument("--stdout", required=True, type=Path, help="captured criterion stdout")
+    ap.add_argument("--stdout", required=True, type=Path, action="append",
+                    help="captured criterion stdout (repeatable: one per core, merged to a median)")
     ap.add_argument("--commit", default="", help="full commit sha of the tag")
     ap.add_argument("--commit-date", default="", help="committer date (ISO 8601)")
     ap.add_argument("--measured-at", default="", help="when this run was measured (ISO 8601)")
@@ -163,14 +195,16 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--out", type=Path, help="output JSON path (default: stdout)")
     args = ap.parse_args(argv)
 
-    text = args.stdout.read_text(encoding="utf-8", errors="replace")
-    benchmarks = parse_benchmarks(text)
+    texts = [p.read_text(encoding="utf-8", errors="replace") for p in args.stdout]
+    captures = [parse_benchmarks(t) for t in texts]
+    benchmarks = aggregate(captures)
     if not benchmarks:
         print(f"error: no benchmarks parsed from {args.stdout}", file=sys.stderr)
         return 1
 
+    # Machine/sysinfo are identical across cores; harvest from the first capture.
     machine = {"instance_type": args.instance_type}
-    machine.update(parse_sysinfo(text))
+    machine.update(parse_sysinfo(texts[0]))
 
     run = {
         "version": args.version,

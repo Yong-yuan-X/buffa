@@ -7,12 +7,15 @@ at a single point in time; this directory compares buffa against *its own past*.
 
 ## What is measured
 
-For every release we build that tag's own `protobuf` benchmark binary and run it,
-then record one data point per benchmark. The numbers are therefore what each
-release actually delivered — not a re-measurement of old code under a modern
-harness. The headline metric is **throughput in MiB/s** (higher is better),
-because it stays comparable across releases even when a tag changed the size of
-its benchmark dataset. Median nanoseconds per iteration are stored alongside.
+For every release we build that tag's own `protobuf` benchmark source and run it
+under **one fixed toolchain and build profile, held constant across the whole
+series**. The numbers therefore isolate buffa's own code changes from compiler and
+build-config changes — this is a controlled re-measurement of each release's code,
+not "whatever that tag happened to ship with." The headline metric is **throughput
+in MiB/s** (higher is better), because it stays comparable across releases even
+when a tag changed the size of its benchmark dataset. Median nanoseconds per
+iteration are stored alongside, and each number is the **median across several
+cores** with its spread recorded (see below).
 
 The benchmark set grows over time: the four core message types (`ApiResponse`,
 `LogRecord`, `AnalyticsEvent`, `GoogleMessage1`) are present from v0.1.0,
@@ -25,10 +28,15 @@ Two things are pinned so a cross-release delta reflects buffa's code, not the
 measurement.
 
 **The machine.** Runs are done on a quiesced host: CPU turbo disabled, the
-`performance` frequency governor, and the benchmark pinned to one core. A shared
-or virtualised machine cannot give trustworthy absolute throughput, so do not
-regenerate these files on a laptop or a busy CI runner and commit the result —
-the drift would masquerade as a regression.
+`performance` frequency governor, and each benchmark instance pinned to its own
+physical core (SMT siblings avoided). Several copies of a release run at once on
+distinct cores and the per-benchmark number is the **median across them**, which
+is robust to the occasional noisy core; the spread is recorded per benchmark.
+Concurrency was validated to track the isolated single-core baseline within ~1%
+on this box (the working sets fit private L2). A shared or virtualised machine
+cannot give trustworthy absolute throughput, so do not regenerate these files on
+a laptop or a busy CI runner and commit the result — the drift would masquerade
+as a regression.
 
 **The build profile.** Every binary is built with **`lto=true,
 codegen-units=1`** — the same optimized profile a consumer building buffa in
@@ -44,9 +52,10 @@ each run file records it in `build_profile`.
 
 ## Comparability caveats
 
-- **This is "as each release measured itself," not a controlled experiment.** The
-  benchmark harness and datasets evolved alongside the library. Throughput
-  normalises for dataset size, but a change in the benchmark loop body between two
+- **The harness and datasets evolved with the library.** Toolchain, profile, and
+  method are held constant, but the benchmark loop body and a tag's dataset can
+  still differ between releases. Throughput normalises for dataset size, but a
+  change in the benchmark loop body between two
   releases can move a number without the library itself changing. When a delta
   looks surprising, check whether that benchmark's source changed at that tag
   before attributing it to the library.
@@ -110,11 +119,12 @@ churn; `codegen-units=1` is the most reproducible cross-release).
 # 1. Build the variants (default sweep: codegen-units 1 2 4 8 16).
 task bench-layout-variants -- /tmp/cgu        # or CGUS="1 16" task bench-layout-variants -- /tmp/cgu
 
-# 2. Run them on a quiesced box, capturing each binary's stdout. On metal:
-bench-on-metal.sh --spot \
-  --binary /tmp/cgu/cgu1.bench --binary /tmp/cgu/cgu16.bench \
-  --args "--measurement-time 4"
-# (save each binary's output as cgu1.txt, cgu16.txt, …)
+# 2. Run each variant on a quiesced machine, capturing its stdout — criterion
+#    needs the --bench flag:
+for v in /tmp/cgu/cgu*.bench; do
+  "$v" --bench --measurement-time 4 > "$(basename "$v" .bench).txt"
+done
+# (yields cgu1.txt, cgu16.txt, …)
 
 # 3. Compute the envelope.
 task bench-layout-envelope -- --run cgu1=cgu1.txt --run cgu16=cgu16.txt
