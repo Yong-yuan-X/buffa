@@ -1428,6 +1428,10 @@ struct FieldInfo {
     /// [`StringRepr::String`] for non-string fields and for string fields with
     /// no matching `string_fields` rule.
     string_repr: crate::StringRepr,
+    /// The owned Rust map collection for a `map` field (`HashMap` / `BTreeMap` /
+    /// custom), resolved by `map_repr`. [`MapRepr::HashMap`](crate::MapRepr::HashMap)
+    /// when the field is not a map or has no matching rule.
+    map_repr: crate::MapRepr,
     /// Proto2 `required` (or editions `LEGACY_REQUIRED`). Required fields
     /// must always appear in JSON output regardless of value, matching the
     /// binary encoder's always-encode semantics.
@@ -1517,6 +1521,13 @@ fn classify_field(
     };
     let string_type = || string_repr.type_path(resolver, ctx, nesting);
 
+    // Configurable owned map collection for `map` fields (default `HashMap`).
+    let map_repr = if is_map {
+        ctx.map_repr(&field_fqn)
+    } else {
+        crate::MapRepr::HashMap
+    };
+
     // Configurable owned pointer for singular message fields (default `Box`).
     let pointer_repr = ctx.pointer_repr(&field_fqn);
 
@@ -1530,7 +1541,7 @@ fn classify_field(
 
     let mut inner_opt_type: Option<TokenStream> = None;
     let rust_type = if let Some(entry) = map_entry {
-        map_rust_type_from_entry(scope, entry, &map_value_bytes_repr, resolver)?
+        map_rust_type_from_entry(scope, entry, &map_value_bytes_repr, &map_repr, resolver)?
     } else if is_repeated {
         let elem = if field_type == Type::TYPE_BYTES {
             bytes_type()?
@@ -1617,6 +1628,7 @@ fn classify_field(
         bytes_repr,
         map_value_bytes_repr,
         string_repr,
+        map_repr,
         map_key_type,
         map_value_type,
         map_value_enum_closed,
@@ -1860,6 +1872,7 @@ fn map_rust_type_from_entry(
     scope: MessageScope<'_>,
     entry: &DescriptorProto,
     value_bytes_repr: &crate::BytesRepr,
+    map_repr: &crate::MapRepr,
     resolver: &crate::imports::ImportResolver,
 ) -> Result<TokenStream, CodeGenError> {
     let MessageScope {
@@ -1906,8 +1919,7 @@ fn map_rust_type_from_entry(
         )?
     };
 
-    let hm = resolver.hashmap_at(ctx, nesting);
-    Ok(quote! { #hm<#key_type, #value_type> })
+    map_repr.type_path(&key_type, &value_type, resolver, ctx, nesting)
 }
 
 /// Resolve the Rust type for a scalar, message, or enum field.
@@ -2232,7 +2244,15 @@ fn skip_serializing_predicate(
         // semantics (impl_message.rs is_proto2_required check).
         None
     } else if info.is_map {
-        Some("::buffa::__private::HashMap::is_empty")
+        // The default `HashMap` keeps `HashMap::is_empty` (byte-identical
+        // output). A `BTreeMap` or custom map is empty-checked through the
+        // generic `MapStorage` surface, since `HashMap::is_empty` would not
+        // typecheck against a different container.
+        if info.map_repr.is_default() {
+            Some("::buffa::__private::HashMap::is_empty")
+        } else {
+            Some("::buffa::json_helpers::skip_if::is_empty_map")
+        }
     } else if info.is_repeated {
         Some("::buffa::json_helpers::skip_if::is_empty_vec")
     } else if info.is_optional {
