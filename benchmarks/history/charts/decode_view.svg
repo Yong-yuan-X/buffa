@@ -7,11 +7,10 @@
     .grid { stroke: #d0d7de; stroke-width: 0.5; }
     .baseline { stroke: #8c959f; stroke-width: 1; stroke-dasharray: 4 3; }
     .noise-band { fill: #b1bac4; opacity: 0.18; }
-    .band-label { font-size: 10px; fill: #8c959f; }
+    .footnote { font-size: 11px; fill: #57606a; }
   </style>
   <rect width="100%" height="100%" fill="white"/>
   <rect x="56" y="284.0" width="560" height="53.3" class="noise-band"/>
-  <text x="612" y="313.7" text-anchor="end" class="band-label">±5% noise</text>
   <text x="336.0" y="26" text-anchor="middle" class="title">View decode — throughput vs each message’s first release (%)</text>
   <line x1="56" y1="364.0" x2="616" y2="364.0" class="grid"/>
   <text x="48" y="368.0" text-anchor="end" class="axis-label">90%</text>
@@ -102,4 +101,5 @@
   <text x="650" y="149" class="legend-text">MediaFrame</text>
   <rect x="632" y="160" width="12" height="12" rx="2" fill="#B279A2"/>
   <text x="650" y="171" class="legend-text">PackedTile</text>
+  <text x="56" y="406.0" class="footnote">Shaded band: ±5% run-to-run noise floor — a line staying inside it did not change beyond noise.</text>
 </svg>

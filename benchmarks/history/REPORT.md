@@ -44,6 +44,8 @@ All throughput values are MiB/s; higher is better.
 
 ### Binary decode
 
+![Binary decode](charts/decode.svg)
+
 | Message | v0.1.0 | v0.2.0 | v0.3.0 | v0.4.0 | v0.5.0 | v0.6.0 | v0.7.0 | v0.7.1 |
 |---------|------:|------:|------:|------:|------:|------:|------:|------:|
 | ApiResponse | 578 | 561 (−3%) | 562 (+0%) | 570 (+1%) | 588 (+3%) | 555 (−6%) | 576 (+4%) | 589 (+2%) |
@@ -53,9 +55,9 @@ All throughput values are MiB/s; higher is better.
 | MediaFrame | 11,950 | 11,834 (−1%) | 11,811 (−0%) | 11,982 (+1%) | 11,842 (−1%) | 12,029 (+2%) | 11,781 (−2%) | 11,614 (−1%) |
 | PackedTile | 226 | 223 (−1%) | 224 (+0%) | 215 (−4%) | 214 (−0%) | 222 (+4%) | 214 (−4%) | 216 (+1%) |
 
-![Binary decode](charts/decode.svg)
-
 ### Merge into existing
+
+![Merge into existing](charts/merge.svg)
 
 | Message | v0.1.0 | v0.2.0 | v0.3.0 | v0.4.0 | v0.5.0 | v0.6.0 | v0.7.0 | v0.7.1 |
 |---------|------:|------:|------:|------:|------:|------:|------:|------:|
@@ -66,9 +68,9 @@ All throughput values are MiB/s; higher is better.
 | MediaFrame | 15,579 | 15,486 (−1%) | 15,393 (−1%) | 15,400 (+0%) | 15,248 (−1%) | 15,506 (+2%) | 15,188 (−2%) | 15,056 (−1%) |
 | PackedTile | 254 | 260 (+2%) | 256 (−2%) | 253 (−1%) | 251 (−1%) | 255 (+2%) | 250 (−2%) | 248 (−1%) |
 
-![Merge into existing](charts/merge.svg)
-
 ### Binary encode
+
+![Binary encode](charts/encode.svg)
 
 | Message | v0.1.0 | v0.2.0 | v0.3.0 | v0.4.0 | v0.5.0 | v0.6.0 | v0.7.0 | v0.7.1 |
 |---------|------:|------:|------:|------:|------:|------:|------:|------:|
@@ -79,9 +81,9 @@ All throughput values are MiB/s; higher is better.
 | MediaFrame | 25,338 | 25,611 (+1%) | 25,373 (−1%) | 25,423 (+0%) | 25,692 (+1%) | 25,389 (−1%) | 25,609 (+1%) | 25,490 (−0%) |
 | PackedTile | 476 | 475 (−0%) | 482 (+1%) | 472 (−2%) | 479 (+2%) | 474 (−1%) | 469 (−1%) | 482 (+3%) |
 
-![Binary encode](charts/encode.svg)
-
 ### Compute size
+
+![Compute size](charts/compute_size.svg)
 
 | Message | v0.1.0 | v0.2.0 | v0.3.0 | v0.4.0 | v0.5.0 | v0.6.0 | v0.7.0 | v0.7.1 |
 |---------|------:|------:|------:|------:|------:|------:|------:|------:|
@@ -92,9 +94,9 @@ All throughput values are MiB/s; higher is better.
 | MediaFrame | 263,352 | 261,898 (−1%) | 263,455 (+1%) | 261,478 (−1%) | 260,567 (−0%) | 261,530 (+0%) | 260,567 (−0%) | 262,267 (+1%) |
 | PackedTile | 1,487 | 1,495 (+1%) | 1,482 (−1%) | 1,462 (−1%) | 1,465 (+0%) | 1,463 (−0%) | 1,476 (+1%) | 1,472 (−0%) |
 
-![Compute size](charts/compute_size.svg)
-
 ### View decode
+
+![View decode](charts/decode_view.svg)
 
 | Message | v0.1.0 | v0.2.0 | v0.3.0 | v0.4.0 | v0.5.0 | v0.6.0 | v0.7.0 | v0.7.1 |
 |---------|------:|------:|------:|------:|------:|------:|------:|------:|
@@ -105,9 +107,9 @@ All throughput values are MiB/s; higher is better.
 | MediaFrame | 43,950 | 44,730 (+2%) | 48,472 (+8%) | 44,892 (−7%) | 48,290 (+8%) | 46,683 (−3%) | 46,281 (−1%) | 43,964 (−5%) |
 | PackedTile | 172 | 174 (+1%) | 170 (−2%) | 174 (+3%) | 170 (−3%) | 170 (+0%) | 170 (−0%) | 246 (+45%) |
 
-![View decode](charts/decode_view.svg)
-
 ### JSON encode
+
+![JSON encode](charts/json_encode.svg)
 
 | Message | v0.1.0 | v0.2.0 | v0.3.0 | v0.4.0 | v0.5.0 | v0.6.0 | v0.7.0 | v0.7.1 |
 |---------|------:|------:|------:|------:|------:|------:|------:|------:|
@@ -118,9 +120,9 @@ All throughput values are MiB/s; higher is better.
 | MediaFrame | 700 | 709 (+1%) | 981 (+38%) | 710 (−28%) | 723 (+2%) | 981 (+36%) | 964 (−2%) | 982 (+2%) |
 | PackedTile | 388 | 378 (−3%) | 377 (−0%) | 365 (−3%) | 366 (+0%) | 364 (−0%) | 364 (−0%) | 365 (+0%) |
 
-![JSON encode](charts/json_encode.svg)
-
 ### JSON decode
+
+![JSON decode](charts/json_decode.svg)
 
 | Message | v0.1.0 | v0.2.0 | v0.3.0 | v0.4.0 | v0.5.0 | v0.6.0 | v0.7.0 | v0.7.1 |
 |---------|------:|------:|------:|------:|------:|------:|------:|------:|
@@ -130,8 +132,6 @@ All throughput values are MiB/s; higher is better.
 | GoogleMessage1 | 400 | 395 (−1%) | 409 (+4%) | 390 (−5%) | 401 (+3%) | 402 (+0%) | 412 (+2%) | 401 (−3%) |
 | MediaFrame | 1,218 | 1,240 (+2%) | 1,217 (−2%) | 1,235 (+2%) | 1,222 (−1%) | 1,222 (+0%) | 1,220 (−0%) | 1,221 (+0%) |
 | PackedTile | 194 | 198 (+2%) | 193 (−3%) | 189 (−2%) | 190 (+1%) | 189 (−0%) | 190 (+0%) | 192 (+1%) |
-
-![JSON decode](charts/json_decode.svg)
 
 ## Measurement spread (core-to-core)
 

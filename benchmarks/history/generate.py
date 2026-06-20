@@ -197,6 +197,8 @@ def render_report(runs: list[dict], matrix: dict[tuple[str, str], dict[str, floa
             continue
         w(f"### {op_disp}")
         w("")
+        w(f"![{op_disp}](charts/{op}.svg)")
+        w("")
         w("| Message | " + " | ".join(versions) + " |")
         w("|---------|" + "|".join(["------:"] * len(versions)) + "|")
         for msg, by_ver in rows:
@@ -213,8 +215,6 @@ def render_report(runs: list[dict], matrix: dict[tuple[str, str], dict[str, floa
                 else:
                     cells.append("—")
             w(f"| {MSG_DISPLAY.get(msg, msg)} | " + " | ".join(cells) + " |")
-        w("")
-        w(f"![{op_disp}](charts/{op}.svg)")
         w("")
 
     # Measurement spread per operation — how noisy each op's numbers are, so the
@@ -331,7 +331,7 @@ def render_chart(op: str, op_disp: str, versions: list[str],
     a('    .grid { stroke: #d0d7de; stroke-width: 0.5; }')
     a('    .baseline { stroke: #8c959f; stroke-width: 1; stroke-dasharray: 4 3; }')
     a('    .noise-band { fill: #b1bac4; opacity: 0.18; }')
-    a('    .band-label { font-size: 10px; fill: #8c959f; }')
+    a('    .footnote { font-size: 11px; fill: #57606a; }')
     a('  </style>')
     a('  <rect width="100%" height="100%" fill="white"/>')
     # Shaded ±NOISE_BAND_PCT band around the 100% baseline (the reproducibility
@@ -342,8 +342,6 @@ def render_chart(op: str, op_disp: str, versions: list[str],
     if band_bot > band_top:
         a(f'  <rect x="{left}" y="{band_top:.1f}" width="{plot_w}"'
           f' height="{band_bot - band_top:.1f}" class="noise-band"/>')
-        a(f'  <text x="{left + plot_w - 4}" y="{(band_top + band_bot) / 2 + 3:.1f}"'
-          f' text-anchor="end" class="band-label">±{NOISE_BAND_PCT:.0f}% noise</text>')
     a(f'  <text x="{left + plot_w / 2}" y="26" text-anchor="middle" class="title">'
       f'{escape(op_disp)} — throughput vs each message’s first release (%)</text>')
 
@@ -382,6 +380,11 @@ def render_chart(op: str, op_disp: str, versions: list[str],
         a(f'  <text x="{lx + 18}" y="{ly + 11}" class="legend-text">{escape(disp)}</text>')
         ly += 22
 
+    # Footnote explaining the shaded band, below the plot where the lines can't
+    # obscure it (rather than a label sitting inside the band among the series).
+    a(f'  <text x="{left}" y="{top + plot_h + 42:.1f}" class="footnote">'
+      f'Shaded band: ±{NOISE_BAND_PCT:.0f}% run-to-run noise floor — a line staying'
+      f' inside it did not change beyond noise.</text>')
     a('</svg>')
     return "\n".join(L) + "\n"
 
