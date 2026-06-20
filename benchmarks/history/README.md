@@ -158,27 +158,35 @@ python3 benchmarks/history/generate.py     # or: task bench-history-report
 
 ## Adding a new release
 
-All releases share one toolchain and profile, so adding a release means matching
-them, not picking new ones. If the new release's MSRV exceeds the pinned
-toolchain, re-pin to a newer stable and regenerate the *whole* series instead.
+All releases share one toolchain and profile, so adding a release means matching them, not picking new ones. If the new release's MSRV exceeds the pinned toolchain, re-pin to a newer stable and regenerate the *whole* series instead.
 
-1. Build the release tag's bench at the pinned toolchain and profile: from a
-   checkout of the tag,
-   `cd benchmarks/buffa && RUSTUP_TOOLCHAIN=1.96.0 CARGO_PROFILE_BENCH_LTO=true CARGO_PROFILE_BENCH_CODEGEN_UNITS=1 cargo bench --bench protobuf --no-run`.
-2. Run it on a quiesced machine, capturing stdout — criterion needs the `--bench`
-   flag: `<binary> --bench --measurement-time 4 > <version>.txt`.
-3. Parse it into a run file (record toolchain + profile so the data is
-   self-documenting):
+1. **Create the reproducible root branch.** From the release tag, branch and push `historical-benchmark/vX.Y.Z` (the convention recorded in `CONTRIBUTING.md`). Releases cut from `main` already carry the per-message-isolated harness; the back-catalogue (v0.1.0–v0.7.1) had it retrofitted onto these branches. This branch is what makes any cell rebuildable later.
+
+2. **Build each shape in isolation** from that branch, at the pinned toolchain and profile — only the target shape's decoder is compiled, so no other shape can perturb it via the compiler's inlining:
 
    ```bash
+   cd benchmarks/buffa
+   for m in api_response log_record analytics_event google_message1 media_frame packed_tile; do
+     RUSTUP_TOOLCHAIN=1.96.0 CARGO_PROFILE_BENCH_LTO=true CARGO_PROFILE_BENCH_CODEGEN_UNITS=1 \
+       cargo bench --no-default-features --features "iso,$m" --bench "$m" --no-run
+   done
+   ```
+
+   (`task bench-iso -- <message>` is the convenience wrapper for one shape.)
+
+3. **Run each isolated binary** on a quiesced machine, capturing stdout per shape — criterion needs the `--bench` flag. For a stable median, run each binary on several pinned physical cores and capture each: `<binary> --bench --measurement-time 4 > <version>.<msg>.<core>.txt`.
+
+4. **Parse all the captures into one run file.** The parser takes the median across every capture that carries a given benchmark id and records the spread, so pass each capture with a repeated `--stdout` flag:
+
+   ```bash
+   stdout_args=$(printf -- '--stdout %s ' <version>.*.txt)
    python3 benchmarks/history/parse_criterion.py \
-     --version <version> --stdout <version>.txt \
+     --version <version> $stdout_args \
      --commit $(git rev-parse <version>) \
      --commit-date "$(git log -1 --format=%cI <version>)" \
      --measured-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-     --toolchain 1.96.0 --profile "lto=true, codegen-units=1" \
+     --toolchain 1.96.0 --profile "lto=true, codegen-units=1, per-message-isolated" \
      --out benchmarks/history/runs/<version>.json
    ```
 
-4. Regenerate the report (above) and add an `annotations.md` entry explaining any
-   notable movement.
+5. Regenerate the report (above) and extend `annotations.md` for any notable movement.
