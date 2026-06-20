@@ -132,4 +132,3 @@ All throughput values are MiB/s; higher is better.
 | PackedTile | 193 | 202 (+5%) | 193 (−5%) | 189 (−2%) | 191 (+1%) | 189 (−1%) | 190 (+0%) | 192 (+1%) |
 
 ![JSON decode](charts/json_decode.svg)
-

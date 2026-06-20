@@ -211,6 +211,8 @@ def render_report(runs: list[dict], matrix: dict[tuple[str, str], dict[str, floa
         w(f"![{op_disp}](charts/{op}.svg)")
         w("")
 
+    while out and out[-1] == "":
+        out.pop()  # avoid a trailing blank line (markdownlint MD012)
     return "\n".join(out) + "\n"
 
 

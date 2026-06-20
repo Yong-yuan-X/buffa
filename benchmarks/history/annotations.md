@@ -16,6 +16,7 @@ each `runs/*.json`, typically 1–6%) are noise.
 ## Headline cross-release findings (v0.1.0 → v0.7.1)
 
 Improvements that clear the spread:
+
 - **PackedTile `decode_view` +42%** and **MediaFrame `json_encode` +40%** — the
   largest gains. JSON encoding improved broadly across shapes over the series, and
   the packed-tile view-decode path got substantially faster.
@@ -23,6 +24,7 @@ Improvements that clear the spread:
   improved for the flat/string-heavy shapes.
 
 Regressions that clear the spread:
+
 - **AnalyticsEvent `encode` −15%** and **`compute_size` −11%** — the deeply
   nested, repeated-submessage shape lost ground on the owned encode and size
   paths. This is the clearest real regression in the set and the one worth
