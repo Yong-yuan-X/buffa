@@ -1,0 +1,8 @@
+kind: Changed
+body: |-
+  `DefaultInstance` / `DefaultViewInstance` / `ViewReborrow` impls are
+  emitted via new public runtime macros (`impl_default_instance!`,
+  `impl_default_view_instance!`, `impl_view_reborrow!`) instead of being
+  expanded per generated type (~290 sites); hand-written message and view
+  types can reuse them. No behavioural change. (#196)
+time: 2026-06-22T00:00:20.000000000Z

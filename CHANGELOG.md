@@ -4,295 +4,7 @@ All notable changes to buffa will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) with the [Rust 0.x convention](https://doc.rust-lang.org/cargo/reference/semver.html): breaking changes increment the minor version (0.1 → 0.2), additive changes increment the patch version.
 
-## [Unreleased]
-
-### Added
-
-- **Custom owned `string` types for `map` keys and values** (#156). A `string_type`
-  rule (`string_type_custom` / `string_type_custom_in`) now also applies to a
-  `map<string, V>` key and a `map<K, string>` value — one rule on the map field
-  path covers both slots of a `map<string, string>` — mirroring how `bytes_type`
-  already reaches `map<K, bytes>` values. The element decodes/encodes through the
-  new sealed `buffa::map_codec::ProtoStringMap<S>` codec; no new build knob. The
-  wire format is unchanged and view types still borrow `&str`. Requirements on
-  the custom type when used in a map: `Hash + Eq` (or `Ord` for
-  `map_type(BTreeMap)`) for a key; `serde::Serialize` / `Deserialize` for JSON;
-  and — because the map paths have no per-key generic shim — a crate-local
-  newtype (vtable reflection emits `ReflectMapKey` / `ReflectElement` for it) and
-  its own `Arbitrary` impl under `generate_arbitrary`. Custom-string-keyed maps
-  whose value needs proto3-JSON encoding (int64/float/bytes) serialize through a
-  new `proto_str_key_map` `with`-module (the existing `proto_map` requires
-  `Display + FromStr`, which a `ProtoString` need not implement).
-
-- **Pluggable owned map container for `map<K, V>` fields** (#156). A new
-  `buffa::MapStorage` trait (with associated `Key` / `Value` types) selects the
-  owned map collection, via `buffa_build`'s `map_type` / `map_type_custom` knobs.
-  The default stays `HashMap`; `BTreeMap` is a zero-dependency built-in giving
-  deterministic (reproducible) encoded bytes, and a crate-local newtype can wrap
-  any other map (e.g. `IndexMap`). JSON and `arbitrary` work for every proto map
-  key/value type regardless of the container — the proto-JSON `with`-modules and
-  the `arbitrary` shim are generic over `MapStorage`. The wire format is
-  unchanged; only the in-memory collection changes, and view types are
-  unaffected.
-
-- **Pluggable owned pointer for message fields** (#156). A new
-  `buffa::ProtoBox<T>` trait (`Deref<Target=T> + DerefMut { new, into_inner }`)
-  selects the smart pointer that a singular message field's `MessageField` wraps
-  — and the pointer of a **boxed oneof message/group variant** — via
-  `buffa_build`'s `box_type` / `box_type_custom` knobs (the custom path takes a
-  `*`-templated type, e.g. `"::my_crate::SmallBox<*>"`). A oneof variant opted
-  into inline storage via `unbox_oneof` takes precedence and gets no pointer;
-  recursive variants stay pointered and so accept a custom pointer. The
-  default stays `Box<T>` and generated output is byte-identical. Only
-  exclusively-owned pointers qualify (`Rc`/`Arc` are excluded — the decoder
-  merges in place via `DerefMut`); inline pointers like `SmallBox` avoid the
-  per-field heap allocation. **Source-breaking note:** `MessageField<T>` gained
-  a defaulted pointer type parameter (`MessageField<T, P = Box<T>>`), so a
-  *standalone* `MessageField::some(x)` / `none()` with no pinning context now
-  needs a type annotation (`MessageField::<T>::some(x)`); struct-literal and
-  typed-assignment construction are unaffected. Added `MessageField::from_pointer`
-  (the generic counterpart to the `Box`-only `from_box`).
-
-- **Docker-free conformance runs** (#192). `task conformance-tools-local`
-  builds `conformance_test_runner` from the pinned protobuf tag into
-  `.local/bin/` and `task conformance-local` executes the same seven runs
-  as the Docker path with the same failure lists — for dev environments
-  without a Docker daemon or GHCR access.
-
-- **Opt-in lazy views: the additive `FooLazyView` family** (#165). With
-  `Config::lazy_views(true)` (plugin: `lazy_views=true`), each message
-  additionally generates a `FooLazyView<'a>` implementing the new
-  `buffa::LazyMessageView` trait — the eager `FooView` family is unchanged
-  and output is byte-identical with or without the flag. `decode_lazy`
-  performs one non-recursive scan, recording singular/repeated message
-  fields as undecoded byte ranges (`LazyMessageFieldView` /
-  `LazyRepeatedView`) that decode on access via fallible by-value accessors
-  (`.get()`, `.get_or_default()`, iteration), so reading a few fields of
-  many large sub-messages no longer allocates or recurses into untouched
-  sub-trees (~12× less allocation churn on the issue's workload; ~200×
-  faster when only 1% of items are read). Proto merge semantics are
-  preserved via per-occurrence fragments merged on access; the recursion
-  depth and unknown-field allowance recorded at each deferred field are
-  replayed per access (per-subtree capture of the shared pool), so
-  `DecodeOptions` limits flow through `decode_lazy_view`. Conversions are
-  fallible (`to_owned_message() -> Result`), the lazy `Serialize` impl
-  surfaces deferred errors as serde errors, and re-encoding replays
-  recorded fragments verbatim without validating them. Groups, oneof
-  message variants, map message values, and extern-typed fields (WKTs,
-  `extern_path`) stay eager inside the lazy view; the lazy family has no
-  reflection/`OwnedView`/text surface. A dedicated `BUFFA_VIA_LAZY`
-  conformance runner mode covers the lazy decoder against the full corpus.
-
-- **Customizable feature-gate names** (#169). `CodeGenConfig::feature_gate_names`
-  (exposed as `buffa_build::Config::{json,views,text,reflect}_feature_name` and
-  `protoc-gen-buffa`'s `{json,views,text,reflect}_feature=` options) renames the
-  crate features that `gate_impls_on_crate_features` conditions the generated
-  impls on — e.g. gating the serde JSON impls behind a feature named `serde`
-  instead of `json`. Defaults are unchanged; the knob is inert unless gating is
-  enabled. A name that is not a valid Cargo feature name fails generation with
-  an error when its gate is active — the alternative is a permanently-false
-  `#[cfg]` that silently compiles the gated impls away.
-
-- **`buffa-build` / `buffa-codegen`: `oneof_attribute`** (#166) — attach Rust
-  attributes to generated oneof enums only (not message structs, not regular
-  enums), matched against the oneof's fully-qualified path
-  (`.pkg.Message.oneof_name`) with the same prefix rules as `type_attribute`.
-  Completes the `type` / `message` / `enum` / `field` attribute family for
-  the case where a oneof needs a different attribute set than the
-  surrounding types.
-
-- **Zero-copy views enforce the unknown-field limit and coalesce adjacent
-  unknown records.** View decoding previously stored one borrowed span (16
-  bytes) per unknown wire record with no bound beyond the input size. Spans
-  for adjacent unknown records now coalesce into a single span — a
-  contiguous run of unknown fields costs one `Vec` slot regardless of field
-  count, and re-encodes byte-identically — and each *new* span (one per
-  unknown run) is counted against the same unknown-field limit that bounds
-  owned-message decoding, configured via
-  `DecodeOptions::with_unknown_field_limit` and honored by
-  `DecodeOptions::decode_view`. As part of this, the view decode path now
-  threads `DecodeContext<'_>`: `MessageView::decode_view_with_limit(buf,
-  depth)` is replaced by `decode_view_with_ctx(buf, ctx)`, and generated
-  views' hidden `_decode_depth` helpers become `_decode_ctx` (**breaking**
-  for code generated by earlier releases, which must be regenerated —
-  consistent with the owned-path change below).
-
-- **View-to-owned conversion is now fallible and honors the decode-time
-  limit.** `MessageView::to_owned_message` and `to_owned_from_source` (and
-  the `OwnedView` wrapper) now return `Result<Owned, DecodeError>`
-  (**breaking**): generated conversions previously swallowed unknown-field
-  re-materialization errors via `unwrap_or_default()`, silently dropping
-  every unknown field. `UnknownFieldsView::to_owned` also now re-materializes
-  under the unknown-field allowance that remained when the view recorded its
-  first unknown field — so a tight `with_unknown_field_limit` configured at
-  `decode_view` time carries through conversion, where each owned
-  `UnknownField` counts individually (unlike the coalesced spans the view
-  stores). Views built manually via `push_raw` fall back to the default
-  limit.
-
-- **Unknown-field decode limit bounds decoder memory amplification.**
-  Unknown wire data can occupy ~20× more memory decoded than encoded:
-  every 2-byte unknown varint field materializes a ~40-byte
-  `UnknownField`, so a 64 MiB payload of minimal unknown fields (flat or
-  nested in a group) could force over 1 GiB of heap — not bounded by
-  `with_max_message_size`, which only caps input length. Decoding now
-  counts every materialized unknown field against a limit shared across
-  the whole decode call and fails with the new
-  `DecodeError::UnknownFieldLimitExceeded` when it is exceeded. The
-  default is 1,000,000 fields per decode (`DEFAULT_UNKNOWN_FIELD_LIMIT`),
-  capping slot overhead at ~40 MB, and applies to all decode entry points
-  including the trait-level convenience methods; tune it with
-  `DecodeOptions::with_unknown_field_limit`. Unknown length-delimited
-  payload bytes are not counted against the limit — the decoder only
-  allocates them once the sender has actually delivered the bytes, so
-  they are bounded by the input size and governed by
-  `with_max_message_size`. The limit covers owned-message and
-  `DynamicMessage` decoding; zero-copy views store unknown fields as
-  borrowed spans and are not affected by the amplification.
-
-- **`chrono` interop for `buffa-types`** (#163). A new off-by-default,
-  `no_std`-compatible `chrono` feature adds conversions between the
-  well-known `Timestamp` / `Duration` types and `chrono::DateTime` /
-  `chrono::TimeDelta`: `From<chrono::DateTime<Tz>> for Timestamp` (any time
-  zone; the instant is preserved), `TryFrom<Timestamp> for DateTime<Utc>`,
-  `From<TimeDelta> for Duration`, and `TryFrom<Duration> for TimeDelta`. The
-  last returns a new `DurationChronoError` because `TimeDelta`'s range
-  (±`i64::MAX` milliseconds) is narrower than proto `Duration`'s.
-  Contributed by @yordis.
-
-- **New `buffa-yaml` crate: YAML serialization with protobuf-JSON semantics**
-  (Phase 1 of protoyaml support, #101). A thin carrier layer that routes
-  buffa's generated protobuf-JSON serde impls through `serde_norway`, so YAML
-  I/O gets the full protobuf JSON mapping: `camelCase`/`snake_case` field
-  names, quoted `int64`/`uint64`, base64 bytes, enum string names, and
-  canonical well-known-type encodings. Public API: `to_string`, `to_writer`,
-  `from_str`, `from_slice`, `from_reader`, plus `to_string_view` /
-  `to_writer_view` for zero-copy views, and an `Error` type exposing a
-  carrier-agnostic `Location { line, column }`. Requires message types
-  generated with `json = true`. Contributed by @rsd-darshan.
-
-- **Proto2 required-field presence on views** (#170). Generated view types
-  (`FooView` and `FooLazyView`) for messages with proto2/editions
-  `LEGACY_REQUIRED` singular fields now expose `has_<field>()` accessors
-  that distinguish a field absent on the wire from one explicitly encoded
-  with its default value. Scalar required fields are tracked via hidden
-  `__buffa_required_seen_*` bit words; message/group required fields
-  delegate to `MessageFieldView::is_set()` / `LazyMessageFieldView::is_set()`.
-  The view `ReflectMessage::has()` implementation consults the same
-  tracking, so reflection agrees with the inherent accessors. Owned
-  messages are unchanged: they store required fields bare and their
-  reflection still reports `has() == false` for a required field at its
-  default value. Messages without required fields are byte-identical to
-  before. `MessageFieldView::is_set` / `is_unset` are now `const fn`.
-
-- **`type_name_prefix` option** (#46). `buffa_build::Config::type_name_prefix("Rpc")`
-  (also `CodeGenConfig::type_name_prefix` and `protoc-gen-buffa`'s
-  `type_name_prefix=` option) prepends a prefix to every generated message
-  struct and enum type name — `message User {}` generates `struct RpcUser`,
-  with views (`RpcUserView`), cross-references, and re-exports following.
-  Module names, oneof enums, `extern_path`-mapped types (including
-  well-known types), and the wire/JSON format are unaffected. The prefix
-  must be PascalCase (an ASCII uppercase letter followed by ASCII letters
-  and digits); anything else is rejected at generation time.
-
-### Changed
-
-- `SizeCache` no longer zeroes its inline slot array on construction. A fresh
-  cache is built for every `encode`/`compute_size`, and because it is passed by
-  `&mut` to an out-of-line `compute_size` the compiler cannot elide the unused
-  tail, so the previous `[0u32; N]` initializer emitted `N/4` SSE stores on
-  every encode (confirmed by disassembly). The inline storage is now
-  `[MaybeUninit<u32>; N]`, written only for the slots actually used; a slot is
-  always written by `reserve` before `len` advances past it and read only at
-  indices `< len`, so the single `assume_init` in `consume_next` is sound. This
-  invariant is private to the `size_cache` module (no external code can break
-  it — worst case is a panic, never UB) and is checked mechanically in CI by a
-  Miri job over the `size_cache` tests. No API or wire-format change. (#223)
-
-- **Default `map<K,V>` hasher is now `foldhash::fast::RandomState`** on `std`
-  builds (previously `std::hash::RandomState` / SipHash-1-3). The container
-  remains `std::collections::HashMap`; only the `S` type parameter changes.
-  This brings the `std` build in line with `no_std` (which already used
-  `foldhash` via `hashbrown`'s default) and matches the hasher class used by
-  Google's `protobuf-v4` (upb / Wyhash). On the LogRecord benchmark — a
-  string-and-map-heavy shape — this is roughly a 12% owned-decode speedup.
-  `foldhash::fast` is per-instance seeded (from ASLR addresses and process
-  start time, not a CSPRNG) and does not advertise HashDoS resistance; treat
-  the default as not hardened against adversarial hash flooding. Consumers
-  decoding `map` fields with attacker-controlled keys who need a hardened
-  bound can select `MapRepr::BTreeMap` (no hashing) or supply a SipHash-backed
-  map via `MapRepr::Custom`. The `MapStorage` and
-  `ReflectMap` impls are now generic over the hasher `S`, so a custom-hasher
-  `std::collections::HashMap` works without a newtype. **Migration:** the
-  concrete map field type changes, so code that names
-  `std::collections::HashMap<K,V>` (default `S`) for a generated field no
-  longer type-checks — use the `buffa::Map<K,V>` alias instead. Construct
-  empty maps with `buffa::Map::default()` (`HashMap::new()` /
-  `HashMap::with_capacity()` are unavailable on `std` builds because they are
-  pinned to std's default hasher; use `default()` on both `std` and `no_std`
-  for portability). Array-literal construction via `Map::from([...])` /
-  `.into()` is likewise unavailable; use `[...].into_iter().collect()`.
-  `buffa::Map` and `buffa::foldhash` are now re-exported at the crate root.
-
-- Generated decode arms (owned merge, view decode, lazy record arms,
-  map-entry loops) emit a single `::buffa::encoding::check_wire_type` call
-  instead of a seven-line inline wire-type guard (~1,100 sites across a
-  generated corpus). Error payloads are byte-identical; the `#[cold]`
-  out-of-line error constructor moves construction off the hot decode
-  path. Regenerate checked-in code to pick up the shrink. (#193)
-
-- Owned map fields encode/decode through the new `buffa::map_codec` module
-  (zero-sized per-proto-type codecs plus generic field helpers) instead of
-  ~40-50 inline generated lines per map field. Wire output, decode-limit
-  semantics, and the fixed-width sizing fast path are unchanged; everything
-  monomorphizes to the previous code. (#194)
-
-- Generated `write_to` bodies use new fused `put_*_field` runtime writers
-  (one call per field arm) instead of separate tag-encode + payload-encode
-  pairs (~870 sites); owned and view impls share them. Wire output is
-  byte-identical. (#195)
-
-- `DefaultInstance` / `DefaultViewInstance` / `ViewReborrow` impls are
-  emitted via new public runtime macros (`impl_default_instance!`,
-  `impl_default_view_instance!`, `impl_view_reborrow!`) instead of being
-  expanded per generated type (~290 sites); hand-written message and view
-  types can reuse them. No behavioural change. (#196)
-
-- Generated JSON `Serialize` impls use new internal (`#[doc(hidden)]`)
-  `buffa::json_helpers` adapter newtypes (`ProtoJson`, `BytesJson`,
-  `MapKeyJson`, sequence variants, ...) instead of ~65 per-site local `_W*`
-  wrapper structs. JSON output is unchanged. (#197)
-- **Breaking:** the decode-path `Message` trait methods (`merge`,
-  `merge_field`, `merge_to_limit`, `merge_group`, `merge_length_delimited`),
-  `encoding::decode_unknown_field`, and `message_set::merge_item` now take a
-  `DecodeContext<'_>` — carrying the remaining recursion depth and the
-  shared unknown-field allowance — in place of the bare `depth: u32`. Code
-  generated with earlier releases must be regenerated. Callers of the
-  convenience methods (`decode`, `decode_from_slice`, `merge_from_slice`,
-  `DecodeOptions`) are unaffected.
-
-- **Breaking:** `MessageView` gains a required `merge_view_field` method,
-  and the per-view decode tag loop is now a provided trait method
-  (`merge_into_view`), mirroring the owned side's `Message::merge` /
-  `merge_field` split. Generated views supply only the field match —
-  regenerate code from earlier releases. Hand-written `MessageView` impls
-  must add `merge_view_field`; the trait docs include the canonical shape,
-  the unknown-field-preserving arm, and the `decode_view` →
-  `decode_view_ctx` wiring. Sub-message arms call the new provided
-  `decode_view_ctx` / `merge_into_view` instead of the removed inherent
-  `_decode_ctx` / `_merge_into_view` helpers. (#198)
-
-### Fixed
-
-- **`DecodeOptions::decode_length_delimited_reader` no longer allocates the
-  wire-declared length up front.** The method previously allocated a zeroed
-  buffer of the declared length before reading, so a source that declared a
-  large length (up to `max_message_size`, 2 GiB by default) but delivered
-  few or no bytes still forced the full allocation. The buffer now grows
-  incrementally as bytes are actually delivered (initial capacity capped at
-  64 KiB), so peak allocation tracks delivered data. Truncated streams
-  report `UnexpectedEof` exactly as before; behavior for well-formed
-  streams is unchanged.
+Entries for unreleased changes live as fragment files under [`.changes/unreleased/`](.changes/unreleased/); run `task changelog-new` to add one. This file is assembled at release time — do not edit it directly.
 
 ## [0.7.1] - 2026-06-10
 
@@ -400,6 +112,8 @@ resolves there automatically.
   with the octal fix, such escapes never appear in protoc-emitted
   descriptors, so this only affects hand-built or corrupted
   `FileDescriptorSet` input.
+
+[0.7.1]: https://github.com/anthropics/buffa/compare/v0.7.0...v0.7.1
 
 ## [0.7.0] - 2026-05-28
 
@@ -624,6 +338,8 @@ up the new `FooOwnedView` wrappers, `HasMessageView` impls, and
   take effect: a type-FQN entry (including a typo'd one) that was a silent
   no-op before will now change the generated reference, and a wrong target
   surfaces as a compile error in the generated code.
+
+[0.7.0]: https://github.com/anthropics/buffa/compare/v0.6.0...v0.7.0
 
 ## [0.6.0] - 2026-05-15
 
@@ -870,6 +586,8 @@ up the new `FooOwnedView` wrappers, `HasMessageView` impls, and
   would now fail to resolve (it was previously a no-op import of an
   empty module). ([#107](https://github.com/anthropics/buffa/pull/107))
 
+[0.6.0]: https://github.com/anthropics/buffa/compare/v0.5.2...v0.6.0
+
 ## [0.5.2] - 2026-05-07
 
 ### Fixed
@@ -895,6 +613,8 @@ up the new `FooOwnedView` wrappers, `HasMessageView` impls, and
   range")` etc. — semantically identical, lint-clean regardless of which
   module wrapper covers it.
 
+[0.5.2]: https://github.com/anthropics/buffa/compare/v0.5.1...v0.5.2
+
 ## [0.5.1] - 2026-05-07
 
 ### Fixed
@@ -909,6 +629,8 @@ up the new `FooOwnedView` wrappers, `HasMessageView` impls, and
   false positives from generated code; the lint is now in the package
   stitcher's `#[allow(...)]` block alongside `dead_code`, `unused_imports`,
   etc.
+
+[0.5.1]: https://github.com/anthropics/buffa/compare/v0.5.0...v0.5.1
 
 ## [0.5.0] - 2026-05-05
 
@@ -1012,6 +734,8 @@ and `__private::arbitrary_bytes`, none of which exist in `buffa` 0.4.0.
   consumers content-addressing serialized bytes (e.g. `hash(encode(msg))`)
   will see different hashes for affected message shapes.
   ([#75](https://github.com/anthropics/buffa/issues/75))
+
+[0.5.0]: https://github.com/anthropics/buffa/compare/v0.4.0...v0.5.0
 
 ## [0.4.0] - 2026-04-27
 
@@ -1150,6 +874,8 @@ and `__private::arbitrary_bytes`, none of which exist in `buffa` 0.4.0.
   case) and `Foo` next to `FooView` (gh#32) — both now structurally
   resolved by the `__buffa::` namespacing above.
 
+[0.4.0]: https://github.com/anthropics/buffa/compare/v0.3.0...v0.4.0
+
 ## [0.3.0] - 2026-04-01
 
 ### Breaking changes
@@ -1241,6 +967,8 @@ and `__private::arbitrary_bytes`, none of which exist in `buffa` 0.4.0.
   rustdoc treats them as literal text.
   ([#25](https://github.com/anthropics/buffa/pull/25))
 
+[0.3.0]: https://github.com/anthropics/buffa/compare/v0.2.0...v0.3.0
+
 ## [0.2.0] - 2026-03-16
 
 ### Breaking changes
@@ -1296,6 +1024,8 @@ and `__private::arbitrary_bytes`, none of which exist in `buffa` 0.4.0.
 API changes in this release. The version bump reflects the
 `protoc-gen-buffa` CLI change; library consumers upgrading from 0.1 should
 see no code changes required.
+
+[0.2.0]: https://github.com/anthropics/buffa/compare/v0.1.0...v0.2.0
 
 ## [0.1.0] - 2026-03-07
 
@@ -1366,14 +1096,4 @@ This release publishes:
 
 MSRV: Rust 1.85.
 
-[Unreleased]: https://github.com/anthropics/buffa/compare/v0.7.1...HEAD
-[0.7.1]: https://github.com/anthropics/buffa/compare/v0.7.0...v0.7.1
-[0.7.0]: https://github.com/anthropics/buffa/compare/v0.6.0...v0.7.0
-[0.6.0]: https://github.com/anthropics/buffa/compare/v0.5.2...v0.6.0
-[0.5.2]: https://github.com/anthropics/buffa/compare/v0.5.1...v0.5.2
-[0.5.1]: https://github.com/anthropics/buffa/compare/v0.5.0...v0.5.1
-[0.5.0]: https://github.com/anthropics/buffa/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/anthropics/buffa/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/anthropics/buffa/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/anthropics/buffa/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/anthropics/buffa/releases/tag/v0.1.0

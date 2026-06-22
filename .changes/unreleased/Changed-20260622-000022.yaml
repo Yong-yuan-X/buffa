@@ -1,0 +1,11 @@
+kind: Changed
+body: |-
+  **Breaking:** the decode-path `Message` trait methods (`merge`,
+  `merge_field`, `merge_to_limit`, `merge_group`, `merge_length_delimited`),
+  `encoding::decode_unknown_field`, and `message_set::merge_item` now take a
+  `DecodeContext<'_>` — carrying the remaining recursion depth and the
+  shared unknown-field allowance — in place of the bare `depth: u32`. Code
+  generated with earlier releases must be regenerated. Callers of the
+  convenience methods (`decode`, `decode_from_slice`, `merge_from_slice`,
+  `DecodeOptions`) are unaffected.
+time: 2026-06-22T00:00:22.000000000Z

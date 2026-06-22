@@ -1,0 +1,8 @@
+kind: Changed
+body: |-
+  Owned map fields encode/decode through the new `buffa::map_codec` module
+  (zero-sized per-proto-type codecs plus generic field helpers) instead of
+  ~40-50 inline generated lines per map field. Wire output, decode-limit
+  semantics, and the fixed-width sizing fast path are unchanged; everything
+  monomorphizes to the previous code. (#194)
+time: 2026-06-22T00:00:18.000000000Z

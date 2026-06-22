@@ -1,0 +1,12 @@
+kind: Added
+body: |-
+  **`chrono` interop for `buffa-types`** (#163). A new off-by-default,
+  `no_std`-compatible `chrono` feature adds conversions between the
+  well-known `Timestamp` / `Duration` types and `chrono::DateTime` /
+  `chrono::TimeDelta`: `From<chrono::DateTime<Tz>> for Timestamp` (any time
+  zone; the instant is preserved), `TryFrom<Timestamp> for DateTime<Utc>`,
+  `From<TimeDelta> for Duration`, and `TryFrom<Duration> for TimeDelta`. The
+  last returns a new `DurationChronoError` because `TimeDelta`'s range
+  (±`i64::MAX` milliseconds) is narrower than proto `Duration`'s.
+  Contributed by @yordis.
+time: 2026-06-22T00:00:11.000000000Z

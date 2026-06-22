@@ -1,0 +1,12 @@
+kind: Added
+body: |-
+  **`type_name_prefix` option** (#46). `buffa_build::Config::type_name_prefix("Rpc")`
+  (also `CodeGenConfig::type_name_prefix` and `protoc-gen-buffa`'s
+  `type_name_prefix=` option) prepends a prefix to every generated message
+  struct and enum type name — `message User {}` generates `struct RpcUser`,
+  with views (`RpcUserView`), cross-references, and re-exports following.
+  Module names, oneof enums, `extern_path`-mapped types (including
+  well-known types), and the wire/JSON format are unaffected. The prefix
+  must be PascalCase (an ASCII uppercase letter followed by ASCII letters
+  and digits); anything else is rejected at generation time.
+time: 2026-06-22T00:00:14.000000000Z

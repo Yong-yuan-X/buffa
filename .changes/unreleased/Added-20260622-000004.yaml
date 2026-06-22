@@ -1,0 +1,8 @@
+kind: Added
+body: |-
+  **Docker-free conformance runs** (#192). `task conformance-tools-local`
+  builds `conformance_test_runner` from the pinned protobuf tag into
+  `.local/bin/` and `task conformance-local` executes the same seven runs
+  as the Docker path with the same failure lists — for dev environments
+  without a Docker daemon or GHCR access.
+time: 2026-06-22T00:00:04.000000000Z

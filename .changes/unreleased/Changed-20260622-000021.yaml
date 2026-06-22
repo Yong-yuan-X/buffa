@@ -1,0 +1,7 @@
+kind: Changed
+body: |-
+  Generated JSON `Serialize` impls use new internal (`#[doc(hidden)]`)
+  `buffa::json_helpers` adapter newtypes (`ProtoJson`, `BytesJson`,
+  `MapKeyJson`, sequence variants, ...) instead of ~65 per-site local `_W*`
+  wrapper structs. JSON output is unchanged. (#197)
+time: 2026-06-22T00:00:21.000000000Z

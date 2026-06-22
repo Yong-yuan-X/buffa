@@ -1,0 +1,9 @@
+kind: Changed
+body: |-
+  Generated decode arms (owned merge, view decode, lazy record arms,
+  map-entry loops) emit a single `::buffa::encoding::check_wire_type` call
+  instead of a seven-line inline wire-type guard (~1,100 sites across a
+  generated corpus). Error payloads are byte-identical; the `#[cold]`
+  out-of-line error constructor moves construction off the hot decode
+  path. Regenerate checked-in code to pick up the shrink. (#193)
+time: 2026-06-22T00:00:17.000000000Z
