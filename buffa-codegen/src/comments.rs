@@ -19,6 +19,14 @@ use quote::quote;
 
 use crate::generated::descriptor::{DescriptorProto, FileDescriptorProto};
 
+pub(crate) const GENERATED_STRUCT_EVOLUTION_NOTE: &str =
+    "Generated struct evolution policy: generated message and view structs may \
+     gain fields when the proto schema or buffa's internal bookkeeping changes. \
+     Construct values by decoding, by starting from `Default::default()` and \
+     setting fields, or by using generated setters where available. Avoid \
+     exhaustive struct literals or destructuring; exhaustive field lists are not \
+     covered by buffa's semver guarantees.";
+
 // ── Descriptor field numbers (from google/protobuf/descriptor.proto) ────────
 // FileDescriptorProto
 const FILE_MESSAGE_TYPE: i32 = 4;
@@ -187,6 +195,19 @@ pub(crate) fn doc_attrs_resolved(
         None => quote! {},
         Some(text) => doc_lines_with_refs(text, scope_fqn, type_map),
     }
+}
+
+pub(crate) fn doc_attrs_with_generated_struct_evolution_note(
+    comment: Option<&str>,
+    scope_fqn: &str,
+    type_map: &HashMap<String, String>,
+) -> TokenStream {
+    doc_attrs_with_tag_resolved(
+        comment,
+        GENERATED_STRUCT_EVOLUTION_NOTE,
+        scope_fqn,
+        type_map,
+    )
 }
 
 /// Like [`doc_attrs_resolved`] but appends a `tag` line after a blank separator.

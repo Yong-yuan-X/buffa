@@ -202,6 +202,7 @@ pub(crate) fn generate_lazy_view_with_nesting(
         rust_path_to_tokens(&p)
     };
 
+    let evolution_policy_note = crate::comments::GENERATED_STRUCT_EVOLUTION_NOTE;
     let doc = format!(
         " Lazy view of `{proto_fqn}`: nested and repeated message fields are\n \
          recorded as undecoded byte ranges and decoded on access. See\n \
@@ -214,7 +215,8 @@ pub(crate) fn generate_lazy_view_with_nesting(
          ```rust,ignore\n \
          use buffa::LazyMessageView;\n\n \
          let view = {rust_name}LazyView::decode_lazy(&bytes)?;\n \
-         ```"
+         ```\n\n \
+         {evolution_policy_note}"
     );
 
     // Lazy field types never leak redacted payloads through Debug (they print

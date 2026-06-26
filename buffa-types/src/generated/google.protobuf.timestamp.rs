@@ -102,6 +102,8 @@
 /// the Joda Time's \[`ISODateTimeFormat.dateTime()`\](
 /// <http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime(>)
 /// ) to obtain a formatter capable of generating timestamps in this format.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "arbitrary", derive(::arbitrary::Arbitrary))]
 pub struct Timestamp {

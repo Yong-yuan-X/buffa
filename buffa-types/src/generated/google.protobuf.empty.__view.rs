@@ -10,6 +10,8 @@
 /// ```text
 /// rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
 /// ```
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct EmptyView<'a> {
     pub __buffa_unknown_fields: ::buffa::UnknownFieldsView<'a>,

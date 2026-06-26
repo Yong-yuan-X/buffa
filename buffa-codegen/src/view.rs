@@ -303,8 +303,11 @@ pub(crate) fn generate_view_with_nesting(
         rust_path_to_tokens(&p)
     };
 
-    let view_doc =
-        crate::comments::doc_attrs_resolved(ctx.comment(proto_fqn), proto_fqn, &ctx.type_map);
+    let view_doc = crate::comments::doc_attrs_with_generated_struct_evolution_note(
+        ctx.comment(proto_fqn),
+        proto_fqn,
+        &ctx.type_map,
+    );
 
     // `FooOwnedView`: a `'static` OwnedView handle with per-field accessors.
     // Skipped for map-entry synthetic messages (never decoded standalone).

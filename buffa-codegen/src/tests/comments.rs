@@ -47,6 +47,33 @@ fn test_message_comment_in_generated_code() {
 }
 
 #[test]
+fn test_generated_struct_docs_include_evolution_policy() {
+    let mut file = proto3_file("evolution_policy.proto");
+    file.message_type.push(DescriptorProto {
+        name: Some("Record".to_string()),
+        field: vec![make_field("id", 1, Label::LABEL_OPTIONAL, Type::TYPE_INT32)],
+        ..Default::default()
+    });
+
+    let config = CodeGenConfig {
+        lazy_views: true,
+        ..Default::default()
+    };
+    let result = generate(&[file], &["evolution_policy.proto".to_string()], &config)
+        .expect("generation should succeed");
+
+    let content = joined(&result);
+    let count = content
+        .matches(crate::comments::GENERATED_STRUCT_EVOLUTION_NOTE)
+        .count();
+    assert!(
+        count >= 3,
+        "owned, eager view, and lazy view structs must document the evolution policy; \
+         found {count} occurrence(s):\n{content}"
+    );
+}
+
+#[test]
 fn test_field_comment_in_generated_code() {
     let mut file = proto3_file("field_comment.proto");
     file.message_type.push(DescriptorProto {

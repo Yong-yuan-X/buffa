@@ -410,6 +410,8 @@ impl ::buffa::Enumeration for SymbolVisibility {
 }
 /// The protocol compiler can output a FileDescriptorSet containing the .proto
 /// files it parses.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -732,6 +734,8 @@ pub const __FILE_DESCRIPTOR_SET_TEXT_ANY: ::buffa::type_registry::TextAnyEntry =
     text_merge: ::buffa::type_registry::any_merge_text::<FileDescriptorSet>,
 };
 /// Describes a complete .proto file.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -1552,6 +1556,8 @@ pub const __FILE_DESCRIPTOR_PROTO_TEXT_ANY: ::buffa::type_registry::TextAnyEntry
     text_merge: ::buffa::type_registry::any_merge_text::<FileDescriptorProto>,
 };
 /// Describes a message type.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -2203,6 +2209,7 @@ pub const __DESCRIPTOR_PROTO_TEXT_ANY: ::buffa::type_registry::TextAnyEntry = ::
 pub mod descriptor_proto {
     #[allow(unused_imports)]
     use super::*;
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -2470,6 +2477,8 @@ pub mod descriptor_proto {
     /// Range of reserved tag numbers. Reserved tag numbers may not be used by
     /// fields or extension ranges in the same message. Reserved ranges may
     /// not overlap.
+    ///
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -2704,6 +2713,7 @@ pub mod descriptor_proto {
     #[doc(inline)]
     pub use super::__buffa::view::descriptor_proto::ReservedRangeOwnedView;
 }
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -3404,6 +3414,7 @@ pub mod extension_range_options {
             &[Self::DECLARATION, Self::UNVERIFIED]
         }
     }
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -3785,6 +3796,8 @@ pub mod extension_range_options {
     pub use super::__buffa::view::extension_range_options::DeclarationOwnedView;
 }
 /// Describes a field within a message.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -4917,6 +4930,8 @@ pub mod field_descriptor_proto {
     }
 }
 /// Describes a oneof.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -5139,6 +5154,8 @@ pub const __ONEOF_DESCRIPTOR_PROTO_TEXT_ANY: ::buffa::type_registry::TextAnyEntr
     text_merge: ::buffa::type_registry::any_merge_text::<OneofDescriptorProto>,
 };
 /// Describes an enum type.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -5563,6 +5580,8 @@ pub mod enum_descriptor_proto {
     /// Note that this is distinct from DescriptorProto.ReservedRange in that it
     /// is inclusive such that it can appropriately represent the entire int32
     /// domain.
+    ///
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -5792,6 +5811,8 @@ pub mod enum_descriptor_proto {
     pub use super::__buffa::view::enum_descriptor_proto::EnumReservedRangeOwnedView;
 }
 /// Describes a value within an enum.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -6053,6 +6074,8 @@ pub const __ENUM_VALUE_DESCRIPTOR_PROTO_TEXT_ANY: ::buffa::type_registry::TextAn
     text_merge: ::buffa::type_registry::any_merge_text::<EnumValueDescriptorProto>,
 };
 /// Describes a service.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -6322,6 +6345,8 @@ pub const __SERVICE_DESCRIPTOR_PROTO_TEXT_ANY: ::buffa::type_registry::TextAnyEn
     text_merge: ::buffa::type_registry::any_merge_text::<ServiceDescriptorProto>,
 };
 /// Describes a method of a service.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -6765,6 +6790,8 @@ pub const __METHOD_DESCRIPTOR_PROTO_TEXT_ANY: ::buffa::type_registry::TextAnyEnt
 ///   <https://developers.google.com/protocol-buffers/docs/proto#options>
 ///   If this turns out to be popular, a web service will be set up
 ///   to automatically assign option numbers.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -8534,6 +8561,7 @@ pub mod file_options {
         }
     }
 }
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -9265,6 +9293,7 @@ pub const __MESSAGE_OPTIONS_TEXT_ANY: ::buffa::type_registry::TextAnyEntry = ::b
     text_encode: ::buffa::type_registry::any_encode_text::<MessageOptions>,
     text_merge: ::buffa::type_registry::any_merge_text::<MessageOptions>,
 };
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -11176,6 +11205,7 @@ pub mod field_options {
             ]
         }
     }
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -11418,6 +11448,8 @@ pub mod field_options {
         text_merge: ::buffa::type_registry::any_merge_text::<EditionDefault>,
     };
     /// Information about the support window of a feature.
+    ///
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -11798,6 +11830,7 @@ pub mod field_options {
     #[doc(inline)]
     pub use super::__buffa::view::field_options::FeatureSupportOwnedView;
 }
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -12183,6 +12216,7 @@ pub const __ONEOF_OPTIONS_TEXT_ANY: ::buffa::type_registry::TextAnyEntry = ::buf
     text_encode: ::buffa::type_registry::any_encode_text::<OneofOptions>,
     text_merge: ::buffa::type_registry::any_merge_text::<OneofOptions>,
 };
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -12747,6 +12781,7 @@ pub const __ENUM_OPTIONS_TEXT_ANY: ::buffa::type_registry::TextAnyEntry = ::buff
     text_encode: ::buffa::type_registry::any_encode_text::<EnumOptions>,
     text_merge: ::buffa::type_registry::any_merge_text::<EnumOptions>,
 };
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -13304,6 +13339,7 @@ pub const __ENUM_VALUE_OPTIONS_TEXT_ANY: ::buffa::type_registry::TextAnyEntry = 
     text_encode: ::buffa::type_registry::any_encode_text::<EnumValueOptions>,
     text_merge: ::buffa::type_registry::any_merge_text::<EnumValueOptions>,
 };
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -13752,6 +13788,7 @@ pub const __SERVICE_OPTIONS_TEXT_ANY: ::buffa::type_registry::TextAnyEntry = ::b
     text_encode: ::buffa::type_registry::any_encode_text::<ServiceOptions>,
     text_merge: ::buffa::type_registry::any_merge_text::<ServiceOptions>,
 };
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -14451,6 +14488,8 @@ pub mod method_options {
 /// options protos in descriptor objects (e.g. returned by Descriptor::options(),
 /// or produced by Descriptor::CopyTo()) will never have UninterpretedOptions
 /// in them.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -14922,6 +14961,8 @@ pub mod uninterpreted_option {
     /// extension (denoted with parentheses in options specs in .proto files).
     /// E.g.,{ \["foo", false\], \["bar.baz", true\], \["moo", false\] } represents
     /// "foo.(bar.baz).moo".
+    ///
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -15123,6 +15164,8 @@ pub mod uninterpreted_option {
 /// readability, but leave us very open to this scenario.  A future feature will
 /// be designed and implemented to handle this, hopefully before we ever hit a
 /// conflict here.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -17121,6 +17164,7 @@ pub mod feature_set {
             &[Self::ENFORCE_NAMING_STYLE_UNKNOWN, Self::STYLE2024, Self::STYLE_LEGACY]
         }
     }
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -17467,6 +17511,8 @@ pub mod feature_set {
 /// messages are generated from FeatureSet extensions and can be used to seed
 /// feature resolution. The resolution with this object becomes a simple search
 /// for the closest matching edition, followed by proto merges.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -17774,6 +17820,8 @@ pub mod feature_set_defaults {
     /// defaults. Not all editions may be contained here.  For a given edition,
     /// the defaults at the closest matching edition ordered at or before it should
     /// be used.  This field must be in strict ascending order by edition.
+    ///
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -18075,6 +18123,8 @@ pub mod feature_set_defaults {
 ///
 /// Encapsulates information about the original source file from which a
 /// FileDescriptorProto was generated.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -18447,6 +18497,7 @@ pub const __SOURCE_CODE_INFO_TEXT_ANY: ::buffa::type_registry::TextAnyEntry = ::
 pub mod source_code_info {
     #[allow(unused_imports)]
     use super::*;
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]
@@ -18959,6 +19010,8 @@ pub mod source_code_info {
 /// Describes the relationship between generated code and its original source
 /// file. A GeneratedCodeInfo message is associated with only one generated
 /// source file, but may contain references to different source .proto files.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -19149,6 +19202,7 @@ pub const __GENERATED_CODE_INFO_TEXT_ANY: ::buffa::type_registry::TextAnyEntry =
 pub mod generated_code_info {
     #[allow(unused_imports)]
     use super::*;
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]

@@ -2,6 +2,8 @@
 // source: google/protobuf/compiler/plugin.proto
 
 /// The version number of protocol compiler.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct VersionView<'a> {
     /// Field 1: `major`
@@ -321,6 +323,8 @@ impl ::serde::Serialize for VersionOwnedView {
     }
 }
 /// An encoded CodeGeneratorRequest is written to the plugin's stdin.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct CodeGeneratorRequestView<'a> {
     /// The .proto files that were explicitly listed on the command-line.  The
@@ -831,6 +835,8 @@ impl ::serde::Serialize for CodeGeneratorRequestOwnedView {
     }
 }
 /// The plugin writes an encoded CodeGeneratorResponse to stdout.
+///
+/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct CodeGeneratorResponseView<'a> {
     /// Error message.  If non-empty, code generation failed.  The plugin process
@@ -1268,6 +1274,8 @@ pub mod code_generator_response {
     #[allow(unused_imports)]
     use super::*;
     /// Represents a single generated file.
+    ///
+    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, Debug, Default)]
     pub struct FileView<'a> {
         /// The file name, relative to the output directory.  The name must not
