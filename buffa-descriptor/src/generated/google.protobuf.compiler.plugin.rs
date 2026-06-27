@@ -2,8 +2,6 @@
 // source: google/protobuf/compiler/plugin.proto
 
 /// The version number of protocol compiler.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -307,8 +305,6 @@ pub const __VERSION_TEXT_ANY: ::buffa::type_registry::TextAnyEntry = ::buffa::ty
     text_merge: ::buffa::type_registry::any_merge_text::<Version>,
 };
 /// An encoded CodeGeneratorRequest is written to the plugin's stdin.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -703,8 +699,6 @@ pub const __CODE_GENERATOR_REQUEST_TEXT_ANY: ::buffa::type_registry::TextAnyEntr
     text_merge: ::buffa::type_registry::any_merge_text::<CodeGeneratorRequest>,
 };
 /// The plugin writes an encoded CodeGeneratorResponse to stdout.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
 #[cfg_attr(feature = "json", serde(default))]
@@ -1245,8 +1239,6 @@ pub mod code_generator_response {
         }
     }
     /// Represents a single generated file.
-    ///
-    /// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
     #[derive(Clone, PartialEq, Default)]
     #[cfg_attr(feature = "json", derive(::serde::Serialize, ::serde::Deserialize))]
     #[cfg_attr(feature = "json", serde(default))]

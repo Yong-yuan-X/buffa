@@ -55,8 +55,6 @@ impl ::buffa::Enumeration for NullValue {
 /// with the proto support for the language.
 ///
 /// The JSON representation for `Struct` is JSON object.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "arbitrary", derive(::arbitrary::Arbitrary))]
 pub struct Struct {
@@ -345,8 +343,6 @@ pub const __STRUCT_TEXT_ANY: ::buffa::type_registry::TextAnyEntry = ::buffa::typ
 /// variants. Absence of any variant indicates an error.
 ///
 /// The JSON representation for `Value` is JSON value.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "arbitrary", derive(::arbitrary::Arbitrary))]
 pub struct Value {
@@ -909,8 +905,6 @@ pub mod value {
 /// `ListValue` is a wrapper around a repeated field of values.
 ///
 /// The JSON representation for `ListValue` is JSON array.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, PartialEq, Default)]
 #[cfg_attr(feature = "arbitrary", derive(::arbitrary::Arbitrary))]
 pub struct ListValue {

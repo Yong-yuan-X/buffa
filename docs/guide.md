@@ -675,9 +675,11 @@ Key design choices:
 - **`__buffa_unknown_fields`** preserves fields from newer schema versions
 - **Struct evolution policy**: generated message and view structs may gain
   fields as schemas evolve or buffa adds internal bookkeeping. Construct values
-  by decoding, starting from `Default::default()` and setting fields, or using
-  generated setters where available; exhaustive struct literals and
-  destructuring are not covered by buffa's semver guarantees.
+  by decoding, with `Foo { x, ..Default::default() }`, or by starting from
+  `Foo::default()` and assigning fields; exhaustive struct literals and
+  destructuring are not covered by buffa's semver guarantees. See the
+  [`Message` trait documentation](https://docs.rs/buffa/latest/buffa/trait.Message.html#struct-evolution-policy)
+  for the full policy.
 - **Module nesting** for nested message types (`outer::Inner`, not `OuterInner`)
 - **No serialization state** — sizes live in an external [`SizeCache`](https://docs.rs/buffa/latest/buffa/struct.SizeCache.html), so the struct holds only its proto fields plus the unknown-fields plumbing, with no interior mutability
 

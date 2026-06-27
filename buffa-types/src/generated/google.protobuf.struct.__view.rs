@@ -9,8 +9,6 @@
 /// with the proto support for the language.
 ///
 /// The JSON representation for `Struct` is JSON object.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct StructView<'a> {
     /// Unordered map of dynamically typed values.
@@ -396,8 +394,6 @@ const _: () = {
 /// variants. Absence of any variant indicates an error.
 ///
 /// The JSON representation for `Value` is JSON value.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct ValueView<'a> {
     pub kind: ::core::option::Option<
@@ -1010,8 +1006,6 @@ const _: () = {
 /// `ListValue` is a wrapper around a repeated field of values.
 ///
 /// The JSON representation for `ListValue` is JSON array.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct ListValueView<'a> {
     /// Repeated field of dynamically typed values.

@@ -4,8 +4,6 @@
 /// Wrapper message for `double`.
 ///
 /// The JSON representation for `DoubleValue` is JSON number.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct DoubleValueView<'a> {
     /// The double value.
@@ -311,8 +309,6 @@ const _: () = {
 /// Wrapper message for `float`.
 ///
 /// The JSON representation for `FloatValue` is JSON number.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct FloatValueView<'a> {
     /// The float value.
@@ -618,8 +614,6 @@ const _: () = {
 /// Wrapper message for `int64`.
 ///
 /// The JSON representation for `Int64Value` is JSON string.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct Int64ValueView<'a> {
     /// The int64 value.
@@ -925,8 +919,6 @@ const _: () = {
 /// Wrapper message for `uint64`.
 ///
 /// The JSON representation for `UInt64Value` is JSON string.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct UInt64ValueView<'a> {
     /// The uint64 value.
@@ -1232,8 +1224,6 @@ const _: () = {
 /// Wrapper message for `int32`.
 ///
 /// The JSON representation for `Int32Value` is JSON number.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct Int32ValueView<'a> {
     /// The int32 value.
@@ -1539,8 +1529,6 @@ const _: () = {
 /// Wrapper message for `uint32`.
 ///
 /// The JSON representation for `UInt32Value` is JSON number.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct UInt32ValueView<'a> {
     /// The uint32 value.
@@ -1846,8 +1834,6 @@ const _: () = {
 /// Wrapper message for `bool`.
 ///
 /// The JSON representation for `BoolValue` is JSON `true` and `false`.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct BoolValueView<'a> {
     /// The bool value.
@@ -2153,8 +2139,6 @@ const _: () = {
 /// Wrapper message for `string`.
 ///
 /// The JSON representation for `StringValue` is JSON string.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct StringValueView<'a> {
     /// The string value.
@@ -2460,8 +2444,6 @@ const _: () = {
 /// Wrapper message for `bytes`.
 ///
 /// The JSON representation for `BytesValue` is JSON string.
-///
-/// Generated struct evolution policy: generated message and view structs may gain fields when the proto schema or buffa's internal bookkeeping changes. Construct values by decoding, by starting from `Default::default()` and setting fields, or by using generated setters where available. Avoid exhaustive struct literals or destructuring; exhaustive field lists are not covered by buffa's semver guarantees.
 #[derive(Clone, Debug, Default)]
 pub struct BytesValueView<'a> {
     /// The bytes value.

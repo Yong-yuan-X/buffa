@@ -782,11 +782,8 @@ fn generate_message_with_nesting(
         }
     };
 
-    let message_doc = crate::comments::doc_attrs_with_generated_struct_evolution_note(
-        ctx.comment(proto_fqn),
-        proto_fqn,
-        &ctx.type_map,
-    );
+    let message_doc =
+        crate::comments::doc_attrs_resolved(ctx.comment(proto_fqn), proto_fqn, &ctx.type_map);
 
     let with_setters_impl = if ctx.config.generate_with_setters && !setter_methods.is_empty() {
         quote! {
