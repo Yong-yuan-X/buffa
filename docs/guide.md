@@ -742,11 +742,11 @@ println!("{}", msg.address.street);  // "" if address is unset
 // Checking presence
 if msg.address.is_set() { /* address was explicitly set */ }
 
-// Setting
-msg.address = MessageField::some(Address {
+// Setting: MessageField<T> implements From<T>
+msg.address = Address {
     street: "123 Main St".into(),
     ..Default::default()
-});
+}.into();
 
 // Or initialize-and-mutate
 msg.address.get_or_insert_default().street = "123 Main St".into();
@@ -763,7 +763,13 @@ msg.address = MessageField::none();
 // Interop with Option
 let opt: Option<&Address> = msg.address.as_option();
 let taken: Option<Address> = msg.address.take();
+
+// Option<T> converts directly too
+let maybe_address = Some(Address::default());
+msg.address = maybe_address.into();
 ```
+
+See the [`MessageField` rustdoc](https://docs.rs/buffa/latest/buffa/struct.MessageField.html#construction-and-conversion) for the complete construction and consuming-conversion examples, including direct `unwrap()`.
 
 ### `EnumValue<T>` — type-safe open enums
 
@@ -785,8 +791,8 @@ pub status: EnumValue<Status>,
 
 ```rust,ignore
 // Setting
-msg.status = EnumValue::from(Status::ACTIVE);
-msg.status = EnumValue::from(42);  // Unknown(42) if not a known variant
+msg.status = Status::ACTIVE.into();
+msg.status = 42.into();  // Unknown(42) if not a known variant
 
 // Direct comparison (EnumValue<E> implements PartialEq<E>)
 if msg.status == Status::ACTIVE { /* ... */ }
@@ -801,6 +807,8 @@ match msg.status {
 let i: i32 = msg.status.to_i32();
 let known: Option<Status> = msg.status.as_known();
 ```
+
+See the [`EnumValue` rustdoc](https://docs.rs/buffa/latest/buffa/enum.EnumValue.html#conversion) for the conversion shorthand.
 
 **Proto2 closed enums** use the bare enum type directly (`Status`, not `EnumValue<Status>`). Unknown values on the wire are routed to `unknown_fields` instead. For migration or interop cases that need direct access to unknown closed-enum values, `open_enums_in` can opt selected closed enums into the open `EnumValue<E>` representation. It is shorthand for the general `override_feature_in` mechanism — path-scoped editions feature overrides for integrators working with protos they cannot modify, applied as if the proto had been migrated to editions with that feature set at the matched paths. The supported override set is the `FeatureOverride` enum; `enum_type:OPEN` is currently the only supported override.
 

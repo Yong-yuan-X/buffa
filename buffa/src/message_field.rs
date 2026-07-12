@@ -275,6 +275,34 @@ const _: fn() = || {
 /// // Clear:
 /// msg.inner = MessageField::none();
 /// ```
+///
+/// # Construction and conversion
+///
+/// [`From`] conversions are the idiomatic way to populate a generated message
+/// field. They accept both a message value and an [`Option`] of one. Consuming
+/// helpers mirror [`Option`], so a known-present field can be unwrapped
+/// directly instead of converting it first.
+///
+/// ```rust,no_run
+/// use buffa::MessageField;
+///
+/// #[derive(Debug, Default, PartialEq)]
+/// struct Address {
+///     street: &'static str,
+/// }
+///
+/// let field: MessageField<Address> = Address { street: "123 Main" }.into();
+/// assert_eq!(field.unwrap().street, "123 Main");
+///
+/// let maybe_street = Some("456 Side");
+/// let field: MessageField<Address> = maybe_street
+///     .map(|street| Address { street })
+///     .into();
+/// assert_eq!(field.unwrap().street, "456 Side");
+///
+/// let empty: MessageField<Address> = None.into();
+/// assert!(empty.is_unset());
+/// ```
 pub struct MessageField<T: Default, P = Box<T>> {
     inner: Option<P>,
     _marker: core::marker::PhantomData<T>,
