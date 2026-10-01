@@ -1840,29 +1840,36 @@ impl Config {
         self
     }
 
-    /// Use a serialized `google.protobuf.FileDescriptorSet` from memory.
+    /// Use a serialized `google.protobuf.FileDescriptorSet` held in memory.
     ///
-    /// Skips invoking `protoc` or `buf` entirely. Accepts an owned `Vec<u8>`
-    /// without copying, or a byte slice (which is copied into the configuration).
-    /// The bytes are decoded when [`compile()`](Self::compile) is called.
-    /// This replaces any previously configured descriptor source.
+    /// Use this when the build script produces the descriptor set itself, for
+    /// example with an in-process compiler such as `protox`.
+    /// [`compile()`](Self::compile) decodes the bytes and does not invoke
+    /// `protoc` or `buf`. This replaces any previously configured descriptor
+    /// source. Pass a slice as `bytes.to_vec()`.
     ///
     /// [`files()`](Self::files) selects which proto files in the descriptor set
     /// to generate, using their exact descriptor names (relative to the proto
     /// source root). The set must also contain their transitive imports.
     /// [`includes()`](Self::includes) is ignored.
     ///
-    /// No file-based Cargo rebuild directives are emitted for this input.
-    /// The caller is responsible for emitting `cargo:rerun-if-changed` or
-    /// `cargo:rerun-if-env-changed` directives for the sources of these bytes.
+    /// # Rebuilds
+    ///
+    /// Print a `cargo:rerun-if-changed` or `cargo:rerun-if-env-changed` line
+    /// for every input the bytes were built from. `buffa-build` cannot see
+    /// those inputs, and `compile()` always prints a `rerun-if-env-changed`
+    /// line of its own, which turns off Cargo's default of rerunning the build
+    /// script when any file in the package changes. Without your own lines, an
+    /// edited `.proto` file does not rerun the script, and the generated code
+    /// goes stale.
     ///
     /// # Example
     ///
     /// ```no_run
+    /// # fn compile_protos_in_process() -> Vec<u8> { Vec::new() }
     /// # fn main() -> Result<(), Box<dyn std::error::Error>> {
-    /// // The bytes can also come from an in-process compiler such as protox.
-    /// let bytes = std::fs::read("schema.binpb")?;
-    /// println!("cargo:rerun-if-changed=schema.binpb");
+    /// let bytes: Vec<u8> = compile_protos_in_process();
+    /// println!("cargo:rerun-if-changed=proto");
     /// buffa_build::Config::new()
     ///     .descriptor_set_bytes(bytes)
     ///     .files(&["api/v1/service.proto"])
@@ -1871,8 +1878,8 @@ impl Config {
     /// # }
     /// ```
     #[must_use]
-    pub fn descriptor_set_bytes(mut self, bytes: impl Into<Vec<u8>>) -> Self {
-        self.descriptor_source = DescriptorSource::Bytes(bytes.into());
+    pub fn descriptor_set_bytes(mut self, bytes: Vec<u8>) -> Self {
+        self.descriptor_source = DescriptorSource::Bytes(bytes);
         self
     }
 
@@ -3120,13 +3127,14 @@ mod tests {
         let path = dir.path().join("set.binpb");
         std::fs::write(&path, &bytes).unwrap();
 
-        // Exercise both accepted input forms and replacement of a previous
-        // source. No proto sources or external compiler are needed.
+        // The file and in-memory sources produce the same output, and
+        // `descriptor_set_bytes` replaces a previously configured file or
+        // `buf` source. No proto sources or external compiler are needed.
         let configs = [
             Config::new().descriptor_set(&path),
             Config::new()
                 .descriptor_set(dir.path().join("missing.binpb"))
-                .descriptor_set_bytes(bytes.as_slice()),
+                .descriptor_set_bytes(bytes.clone()),
             Config::new().use_buf().descriptor_set_bytes(bytes),
         ];
         let mut outputs = Vec::new();
@@ -3167,7 +3175,7 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let out = dir.path().join("gen");
         let err = Config::new()
-            .descriptor_set_bytes(&[0xff][..])
+            .descriptor_set_bytes(vec![0xff])
             .out_dir(&out)
             .compile()
             .unwrap_err();
