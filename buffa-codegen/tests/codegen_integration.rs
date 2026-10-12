@@ -318,7 +318,7 @@ fn gen_wkt_types_derives_eq_and_hash_only_for_selected_owned_messages() {
                     );
                 }
             }
-            let has_trait = |name: &str| derives.iter().any(|path| path.is_ident(name));
+            let has_trait = |trait_name: &str| derives.iter().any(|path| path.is_ident(trait_name));
             let selected = expected.contains(&name.as_str());
             assert_eq!(has_trait("Eq"), selected, "Eq derive for {name}");
             assert_eq!(has_trait("Hash"), selected, "Hash derive for {name}");
