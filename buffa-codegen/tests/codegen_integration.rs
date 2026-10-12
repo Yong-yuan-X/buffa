@@ -239,7 +239,6 @@ fn codegen_wkt_auto_mapping() {
     let content = &files[0].content;
     assert!(content.contains("::buffa_types::google::protobuf::Timestamp"));
     assert!(content.contains("::buffa_types::google::protobuf::Duration"));
-    assert!(!content.contains("#[derive(Eq, Hash)]"));
 }
 
 #[test]

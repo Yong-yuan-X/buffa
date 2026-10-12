@@ -75,6 +75,34 @@ fn any_hashes_equal_payloads_equally() {
 }
 
 #[test]
+fn any_and_type_messages_are_hash_set_keys() {
+    let any = wkt::Any {
+        type_url: "type.googleapis.com/google.protobuf.Int32Value".into(),
+        value: vec![0x08, 0x2a].into(),
+        ..Default::default()
+    };
+    let mut anys = HashSet::new();
+    assert!(anys.insert(any.clone()));
+    assert!(!anys.insert(any.clone()));
+    assert!(anys.insert(wkt::Any::default()));
+
+    // `Type` reaches `Any` through `Option.value`.
+    let ty = wkt::Type {
+        name: "example.Message".into(),
+        options: vec![wkt::Option {
+            name: "deprecated".into(),
+            value: any.into(),
+            ..Default::default()
+        }],
+        ..Default::default()
+    };
+    let mut types = HashSet::new();
+    assert!(types.insert(ty.clone()));
+    assert!(!types.insert(ty));
+    assert!(types.insert(wkt::Type::default()));
+}
+
+#[test]
 fn unknown_fields_participate_in_equality_and_hashing() {
     let plain = wkt::Timestamp::default();
     // Unknown field 99, with varint values 7 and 8.
