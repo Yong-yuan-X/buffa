@@ -121,8 +121,10 @@ fn main() {
         ".google.protobuf.Any.value".to_string(),
         buffa_codegen::BytesRepr::Bytes,
     )];
-    // Keep this allowlist explicit: floating-point wrappers and
-    // Value/Struct/ListValue cannot derive Eq or Hash.
+    // Every message that holds no floating-point value derives Eq and Hash.
+    // The list is explicit because the rest cannot: `DoubleValue` and
+    // `FloatValue` hold a float, and `Value`, `Struct` and `ListValue` reach
+    // one through `Value.number_value`.
     config.message_attributes = [
         "Timestamp",
         "Duration",
@@ -137,6 +139,14 @@ fn main() {
         "BoolValue",
         "StringValue",
         "BytesValue",
+        "Type",
+        "Field",
+        "Enum",
+        "EnumValue",
+        "Option",
+        "Api",
+        "Method",
+        "Mixin",
     ]
     .into_iter()
     .map(|name| {

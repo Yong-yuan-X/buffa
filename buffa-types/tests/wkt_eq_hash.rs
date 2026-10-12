@@ -29,6 +29,14 @@ fn float_free_wkts_implement_eq_and_hash() {
     assert_eq_hash::<wkt::BoolValue>();
     assert_eq_hash::<wkt::StringValue>();
     assert_eq_hash::<wkt::BytesValue>();
+    assert_eq_hash::<wkt::Type>();
+    assert_eq_hash::<wkt::Field>();
+    assert_eq_hash::<wkt::Enum>();
+    assert_eq_hash::<wkt::EnumValue>();
+    assert_eq_hash::<wkt::Option>();
+    assert_eq_hash::<wkt::Api>();
+    assert_eq_hash::<wkt::Method>();
+    assert_eq_hash::<wkt::Mixin>();
 }
 
 #[test]
